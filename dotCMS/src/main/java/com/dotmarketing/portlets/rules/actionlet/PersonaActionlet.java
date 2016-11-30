@@ -72,7 +72,7 @@ public class PersonaActionlet extends RuleActionlet<PersonaActionlet.Instance> {
                     Logger.warn(PersonaActionlet.class, "Persona with id '" + instance.personaId + "' not be found. Could not execute action.");
                     result = false;
                 } else {
-                    opt.get().setPersona(p);
+                   // opt.get().setPersona(p);
                     result = true;
                 }
             } else{

@@ -13,8 +13,9 @@ import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.view.context.ViewContext;
 import org.apache.velocity.tools.view.tools.ViewTool;
 
+import com.dotcms.visitor.domain.AccruedTag;
 import com.dotcms.visitor.domain.Visitor;
-import com.dotcms.visitor.domain.Visitor.AccruedTag;
+
 import com.dotmarketing.beans.Host;
 import com.dotmarketing.business.APILocator;
 import com.dotmarketing.business.web.UserWebAPI;

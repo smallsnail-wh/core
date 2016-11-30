@@ -1,144 +1,99 @@
 package com.dotcms.visitor.domain;
 
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import org.immutables.value.Value;
+
 import com.dotcms.repackage.com.google.common.collect.HashMultiset;
 import com.dotcms.repackage.com.google.common.collect.Multiset;
 import com.dotcms.repackage.com.google.common.collect.Multisets;
-import eu.bitwalker.useragentutils.DeviceType;
-import com.dotmarketing.business.APILocator;
-import com.dotmarketing.exception.DotDataException;
 import com.dotmarketing.portlets.languagesmanager.model.Language;
 import com.dotmarketing.portlets.personas.model.IPersona;
-import com.dotmarketing.tag.model.Tag;
-import com.dotmarketing.util.Logger;
-import com.dotmarketing.util.TagUtil;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+
+import eu.bitwalker.useragentutils.DeviceType;
 import eu.bitwalker.useragentutils.UserAgent;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.*;
 
-public class Visitor implements Serializable {
+@Value.Immutable
+public abstract class Visitor implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+     static final long serialVersionUID = 1L;
 
-    private InetAddress ipAddress;
+     public abstract InetAddress ipAddress();;
 
-    private Language selectedLanguage;
+     public abstract Language language();
 
-    private Locale locale;
+     public abstract Locale locale();
 
-    private IPersona persona;
+     public abstract IPersona persona();
 
-    private Multiset<String> _accruedTags = HashMultiset.create();
+     Multiset<String> _accruedTags = HashMultiset.create();
     		
-    		
-    		
-    private UserAgent userAgent;
+     public abstract UserAgent userAgent();
 
-    private UUID dmid;
+     public abstract String dmid();
 
-    private boolean newVisitor = true;
+     public abstract boolean newVisitor();
 
-    private URI referrer;
+     public abstract String referrer();
 
-    private LocalDateTime lastRequestDate;
+     public abstract Date lastRequestDate();
 
-    private final Map<String, Serializable> map = new HashMap<>();
+     private Map<String, Serializable> map =  ImmutableMap.of();
 
-    private final Set<String> pagesViewed = new HashSet<>();
+     Set<String> pagesViewed =  ImmutableSet.of();
+     /*
+     public void setPersona(IPersona persona) {
 
-    //private VisitorsJourney journey;
+       //Validate if we must accrue the Tags for this "new" Persona
+       if ( persona != null &&
+               (this.persona == null || !this.persona.getIdentifier().equals(persona.getIdentifier())) ) {
 
-    public static Visitor newInstance(HttpServletRequest request) {
-        return new Visitor();
+           try {
+               //The Persona changed for this Visitor, we must accrue the tags associated to this new Persona
+               List<Tag> personaTags = APILocator.getTagAPI().getTagsByInode(persona.getInode());
+
+               String foundTags = TagUtil.tagListToString(personaTags);
+               //Accrue these found tags to this visitor object
+               TagUtil.accrueTagsToVisitor(this, foundTags);
+           } catch (DotDataException e) {
+               Logger.error(this, "Unable to retrieve Tags associated to Persona [" + persona.getInode() + "].", e);
+           }
+
+       }
+
+       this.persona = persona;
+   }
+*/
+     InetAddress getIpAddress() {
+        return ipAddress();
     }
 
-    public InetAddress getIpAddress() {
-        return ipAddress;
-    }
 
-    public void setIpAddress(InetAddress ipAddress) {
-        this.ipAddress = ipAddress;
-    }
-
-    public Language getSelectedLanguage() {
-        return selectedLanguage;
-    }
-
-    public void setSelectedLanguage(Language selectedLanguage) {
-        this.selectedLanguage = selectedLanguage;
-    }
 
     public Locale getLocale() {
-        return locale;
+        return locale();
     }
 
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
+
 
     public IPersona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(IPersona persona) {
-
-        //Validate if we must accrue the Tags for this "new" Persona
-        if ( persona != null &&
-                (this.persona == null || !this.persona.getIdentifier().equals(persona.getIdentifier())) ) {
-
-            try {
-                //The Persona changed for this Visitor, we must accrue the tags associated to this new Persona
-                List<Tag> personaTags = APILocator.getTagAPI().getTagsByInode(persona.getInode());
-
-                String foundTags = TagUtil.tagListToString(personaTags);
-                //Accrue these found tags to this visitor object
-                TagUtil.accrueTagsToVisitor(this, foundTags);
-            } catch (DotDataException e) {
-                Logger.error(this, "Unable to retrieve Tags associated to Persona [" + persona.getInode() + "].", e);
-            }
-
-        }
-
-        this.persona = persona;
+        return persona();
     }
 
     
-   public class AccruedTag implements Serializable {
-
-	   private static final long serialVersionUID = 1L;
-	   final String tag;
-	   final int count;
-	   public AccruedTag ( String tag,  int count){
-		   	this.tag = tag;
-	   		this.count=count;
-	   }
-	   public String getTag() {
-		   return tag;
-	   }
-	   public int getCount() {
-		   return count;
-	   }
-		@Override
-		public boolean equals(Object obj) {
-			if(obj instanceof AccruedTag){
-				AccruedTag tag2=(AccruedTag)obj;
-				if(tag2.getTag().equals(this.tag) && this.count== tag2.count){
-					return true;
-				}
-			}
-			return false;
-		}
-		@Override
-		public String toString() {
-			return "{\"tag\":\"" + tag + "\", \"count\":" + count + "}";
-			
-		}
-		
-    }
+    public abstract List<AccruedTag> accruedTags();
+    
+    
    
     public List<AccruedTag> getAccruedTags() {
     	List<AccruedTag> tags = new ArrayList<>();
@@ -150,7 +105,6 @@ public class Visitor implements Serializable {
     }
     
     public List<AccruedTag> getTags() {
-
 		return getAccruedTags();
     }
     
@@ -176,115 +130,55 @@ public class Visitor implements Serializable {
     public void clearTags(){
     	_accruedTags = HashMultiset.create();
     }
+    
 
     public UserAgent getUserAgent() {
-        return userAgent;
+        return this.userAgent();
     }
 
-    public void setUserAgent(UserAgent userAgent) {
-        this.userAgent = userAgent;
-    }
 
-    public UUID getDmid() {
-        return dmid;
-    }
-
-    public void setDmid(UUID dmid) {
-        this.dmid = dmid;
+    public String getDmid() {
+        return dmid();
     }
 
     public boolean isNewVisitor() {
-        return newVisitor;
-    }
-    public boolean getNewVisitor() {
-        return newVisitor;
-    }
-    public void setNewVisitor(boolean newVisitor) {
-        this.newVisitor = newVisitor;
+        return newVisitor();
     }
 
-    public URI getReferrer() {
-        return referrer;
+    public boolean getNewVisitor() {
+        return newVisitor();
     }
-    
+
+
+    public String getReferrer() {
+        return referrer();
+    }
+
     public String getDevice() {
-    	if(userAgent !=null){
-    		return userAgent.getOperatingSystem().getDeviceType().toString();
+    	if(userAgent() !=null){
+    		return userAgent().getOperatingSystem().getDeviceType().toString();
     	}
         return DeviceType.UNKNOWN.toString();
     }
     
 
-    public void setReferrer(URI referrer) {
-        this.referrer = referrer;
+    public Date getLastRequestDate() {
+        return lastRequestDate();
     }
 
-    public LocalDateTime getLastRequestDate() {
-        return lastRequestDate;
-    }
 
-    public void setLastRequestDate(LocalDateTime lastRequestDate) {
-        this.lastRequestDate = lastRequestDate;
-    }
+    public void put(String key, Serializable value) {
+        map= ImmutableMap.<String, Serializable>builder().putAll(map).put(key, value).build();
 
-    public Serializable put(String key, Serializable value) {
-        return map.put(key, value);
     }
 
     public Serializable get(String key) {
         return map.get(key);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Visitor visitor = (Visitor) o;
-
-        return !(dmid != null ? !dmid.equals(visitor.dmid) : visitor.dmid != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return dmid != null ? dmid.hashCode() : 0;
-    }
-
-    @Override
-    public String toString() {
-        return "Visitor{" +
-        		"id=" + this.hashCode() +
-                ", ipAddress=" + ipAddress +
-                ", selectedLanguage=" + selectedLanguage +
-                ", locale=" + locale +
-                ", persona=" + persona +
-                ", accruedTags=" + _accruedTags +
-                ", userAgent=" + userAgent +
-                ", device=" + getDevice() +
-                ", dmid=" + dmid +
-                ", newVisitor=" + newVisitor +
-                ", referrer=" + referrer +
-                ", lastRequestDate=" + lastRequestDate +
-                ", map=" + map +
-                '}';
-    }
 
 
-    /**
-      * Add uri as a visited page.
-      *
-      * @param uri
-     */
-    public void addPagesViewed(String uri){
-        pagesViewed.add(uri);
-    }
-
-    /**
-     * Return the number og page visited by the current user.
-     *
-     * @return
-    */
+    @Value.Derived
     public int getNumberPagesViewed(){
         return pagesViewed.size();
     }

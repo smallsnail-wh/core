@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.dotcms.visitor.business.VisitorAPI;
+import com.dotcms.visitor.domain.ImmutableVisitor;
 import com.dotcms.visitor.domain.Visitor;
 import com.dotmarketing.portlets.contentlet.business.DotContentletStateException;
 import com.dotmarketing.portlets.rules.business.RulesEngine;
@@ -449,6 +450,10 @@ public abstract class VelocityServlet extends HttpServlet {
 				newVisitor = true;
 
 				if(visitor.isPresent()) {
+				  
+				    visitor = ImmutableVisitor.copyOf(visitor.get()).withDmid(_dotCMSID);
+				  
+				  
 					visitor.get().setDmid(UUID.fromString(_dotCMSID));
 				}
 
