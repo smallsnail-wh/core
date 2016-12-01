@@ -145,7 +145,7 @@ public class APILocator extends Locator<APIIndex>{
 	/**
 	 * Private constructor for the singleton.
 	 */
-	private APILocator() {
+	protected APILocator() {
 		super();
 	}
 
@@ -157,11 +157,10 @@ public class APILocator extends Locator<APIIndex>{
 			return;
 
 
-		String apiLocatorClass = Config.getStringProperty(
-			"API_LOCATOR_IMPLEMENTATION", APILocator.class.getName()
-		);
-
-		instance = (APILocator) ReflectionUtils.newInstance(apiLocatorClass);
+		String apiLocatorClass = Config.getStringProperty("API_LOCATOR_IMPLEMENTATION", null, false);
+		if (apiLocatorClass != null) {
+			instance = (APILocator) ReflectionUtils.newInstance(apiLocatorClass);
+		}
 		if (instance == null) {
 			instance = new APILocator();
 		}
