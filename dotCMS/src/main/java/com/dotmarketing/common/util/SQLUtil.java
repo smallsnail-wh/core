@@ -32,11 +32,11 @@ public class SQLUtil {
 
 	private final static Set<String> ORDERBY_WHITELIST= ImmutableSet.of(
 			"title","filename", "moddate", "tagname","pageUrl",
-			"category_name","category_velocity_var_name",
+			"category_name","category_velocity_var_name","status","workflow_step.name","assigned_to",
 			"mod_date","structuretype,upper(name)","upper(name)",
 			"category_key", "page_url","name","velocity_var_name",
 			"description","category_","sort_order","hostName", "keywords",
-			"mod_date,upper(name)");
+			"mod_date,upper(name)", "relation_type_value");
 	
 	public static List<String> tokenize(String schema) {
 		List<String> ret=new ArrayList<String>();
