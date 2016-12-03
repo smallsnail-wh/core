@@ -31,7 +31,7 @@ public class RatingWebAPI implements ViewTool {
 		String _dotCMSID = "";
 		if(!UtilMethods.isSet(UtilMethods.getCookieValue(req.getCookies(),
 				com.dotmarketing.util.WebKeys.LONG_LIVED_DOTCMS_ID_COOKIE))) {
-			Cookie idCookie = CookieUtil.createCookie();
+			Cookie idCookie = CookieUtil.createDMIDCookie();
 		}
 		_dotCMSID = UtilMethods.getCookieValue(req.getCookies(),
 				com.dotmarketing.util.WebKeys.LONG_LIVED_DOTCMS_ID_COOKIE);
@@ -79,7 +79,7 @@ public class RatingWebAPI implements ViewTool {
 		String _dotCMSID = "";
 		if(!UtilMethods.isSet(UtilMethods.getCookieValue(req.getCookies(),
 				com.dotmarketing.util.WebKeys.LONG_LIVED_DOTCMS_ID_COOKIE))) {
-			Cookie idCookie = CookieUtil.createCookie();
+			Cookie idCookie = CookieUtil.createDMIDCookie();
 		}
 		_dotCMSID = UtilMethods.getCookieValue(req.getCookies(),
 				com.dotmarketing.util.WebKeys.LONG_LIVED_DOTCMS_ID_COOKIE);

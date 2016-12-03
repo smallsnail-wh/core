@@ -3,7 +3,11 @@ package com.dotcms.visitor.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.annotation.Nullable;
+
 import org.immutables.value.Value;
+
+import eu.bitwalker.useragentutils.UserAgent;
 
 @Value.Immutable
 public abstract class VisitorRequest implements Serializable {
@@ -11,30 +15,44 @@ public abstract class VisitorRequest implements Serializable {
 
   static final long serialVersionUID = 1L;
 
-  abstract Visit visit();
+  public abstract String protocol();
+  public abstract String ipAddress();
+  public abstract String serverName();
 
-  abstract String protocol();
+  public abstract int serverPort();
 
-  abstract String serverName();
+  public abstract String uri();
 
-  abstract int serverPort();
+  @Nullable
+  public abstract String queryString();
 
-  abstract String uri();
+  @Nullable
+  public abstract String userId();
 
-  abstract String queryString();
-
-  abstract String userId();
-
-  abstract long languageId();
+  public abstract long languageId();
 
   @Value.Lazy
-  Date timestamp() {
+  public Date timestamp() {
     return new Date();
   }
 
-  abstract String hostId();
+  public abstract String hostId();
 
-  abstract String contentId();
+  public abstract String userAgentHeader();
 
+  
+  public abstract UserAgent userAgent();
+  
+  @Nullable
+  public abstract String contentId();
+  
+  @Nullable
+  public abstract String pageId();
+
+  
+  @Nullable
+  public abstract String referer();
+
+  public abstract String dmid();
 
 }

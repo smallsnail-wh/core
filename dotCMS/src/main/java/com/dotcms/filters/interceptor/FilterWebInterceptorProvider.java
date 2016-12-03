@@ -2,6 +2,9 @@ package com.dotcms.filters.interceptor;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
+import com.dotmarketing.util.Config;
+
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,10 +29,8 @@ public class FilterWebInterceptorProvider implements Serializable {
      */
     public static FilterWebInterceptorProvider getInstance (final HttpServletRequest request) {
 
-        final ServletContext context =
-                request.getSession().getServletContext();
 
-        return getInstance(context);
+        return getInstance(request.getServletContext());
     } // getInstance.
 
 

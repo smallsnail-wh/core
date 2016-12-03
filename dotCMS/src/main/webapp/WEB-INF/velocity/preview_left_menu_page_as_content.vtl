@@ -17,8 +17,8 @@
 #end
 
 ##DOTCMS-5365
-#if($UtilMethods.isSet($request.getAttribute("com.dotmarketing.wiki.contentlet.url")))
-    #set($VTLSERVLET_URI =  $request.getAttribute("com.dotmarketing.wiki.contentlet.url"))
+#if($UtilMethods.isSet($request.getAttribute("com.dotcms.urlmapped.url")))
+    #set($VTLSERVLET_URI =  $request.getAttribute("com.dotcms.urlmapped.url"))
 #end
 
 #set($isAngularFrame = $UtilMethods.isSet("$!request.getSession().getAttribute('in_frame')"))
@@ -347,8 +347,8 @@
     function viewDiff(){
 		var varHTMLPage = document.getElementById("htmlPageId").value;
 		var diffUrl;
-        #if($UtilMethods.isSet($request.getAttribute('com.dotmarketing.wiki.contentlet')))
-        	diffUrl="/html/portlet/ext/htmlpages/view_live_working_diff.jsp?id=" + varHTMLPage + "&contentId=$request.getAttribute('com.dotmarketing.wiki.contentlet')" + "&pageLang=" + language;
+        #if($UtilMethods.isSet($request.getAttribute('com.dotcms.urlmapped.id')))
+        	diffUrl="/html/portlet/ext/htmlpages/view_live_working_diff.jsp?id=" + varHTMLPage + "&contentId=$request.getAttribute('com.dotcms.urlmapped.id')" + "&pageLang=" + language;
         #else
         	diffUrl="/html/portlet/ext/htmlpages/view_live_working_diff.jsp?id=" + varHTMLPage + "&pageLang=" + language;
         #end

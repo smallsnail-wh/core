@@ -4,6 +4,7 @@ import com.dotcms.TestBase;
 import com.dotcms.repackage.com.google.common.collect.Maps;
 import com.dotcms.visitor.business.VisitorAPI;
 import com.dotcms.visitor.domain.Visitor;
+import com.dotmarketing.business.APILocator;
 import com.dotmarketing.business.UserAPI;
 import com.dotmarketing.exception.DotDataException;
 import com.dotmarketing.exception.DotSecurityException;
@@ -41,7 +42,8 @@ public class PersonaActionletTest extends TestBase {
         PersonaActionlet.Instance foo = pa.instanceFrom(test.params);
         boolean result = pa.evaluate(test.request, test.response, foo);
         assertThat("Result should be true.", result, is(true));
-        verify(test.visitor, times(1)).setPersona(test.persona);
+        
+        verify(APILocator.getVisitorAPI().setPersona(test.persona, test.request));
     }
 
     @Test

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import com.dotcms.api.web.HttpServletRequestThreadLocal;
 import com.dotcms.visitor.business.VisitorAPI;
+
 import com.dotcms.visitor.domain.Visitor;
 import com.dotmarketing.util.*;
 import org.apache.commons.logging.LogFactory;
@@ -62,13 +63,13 @@ public class CMSFilter implements Filter {
 	public static final String CMS_FILTER_IDENTITY = "CMS_FILTER_IDENTITY";
 	public static final String CMS_FILTER_URI_OVERRIDE = "CMS_FILTER_URLMAP_OVERRIDE";
 
-	private static VisitorAPI visitorAPI = APILocator.getVisitorAPI();
+
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-
+	
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-
+	    VisitorAPI visitorAPI = APILocator.getVisitorAPI();
 		// set the request in the threadlocal.
 		this.requestThreadLocal.setRequest(request);
 
@@ -290,10 +291,12 @@ public class CMSFilter implements Filter {
 		}
 
 		if (PAGE_MODE) {
-			Optional<Visitor> visitor = visitorAPI.getVisitor(request);
+			Optional<Visitor> visitor = APILocator.getVisitorAPI().getVisitor(request);
 
 			if (visitor.isPresent()) {
-				visitor.get().addPagesViewed(request.getRequestURI());
+			    
+			    
+				//visitor.get().addPagesViewed(request.getRequestURI());
 			}
 
 		}

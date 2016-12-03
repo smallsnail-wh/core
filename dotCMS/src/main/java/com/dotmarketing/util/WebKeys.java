@@ -286,59 +286,7 @@ public final class WebKeys {
     public static final String DIRECTORIES_LIST = "com.dotmarketing.servicesdirectory.list";
     public static final String DIRECTORY_EDIT = "com.dotmarketing.servicesdirectory.edit";
 
-    //SHOPPING
-    public static final String SHOPPING_C_A_ADDORDERNOTEACTION = "com.dotmarketing.portlets.shopping.c.a.AddOrderNoteAction";
-	public static final String SHOPPING_C_A_BROWSECATEGORIESACTION = "com.dotmarketing.portlets.shopping.c.a.BrowseCategoriesAction";
-	public static final String SHOPPING_C_A_CHANGEORDERACTION = "com.dotmarketing.portlets.shopping.c.a.ChangeOrderAction";
-	public static final String SHOPPING_C_A_DELETECATEGORYACTION = "com.dotmarketing.portlets.shopping.c.a.DeleteCategoryAction";
-	public static final String SHOPPING_C_A_DELETEITEMACTION = "com.dotmarketing.portlets.shopping.c.a.DeleteItemAction";
-	public static final String SHOPPING_C_A_DELETEORDERACTION = "com.dotmarketing.portlets.shopping.c.a.DeleteOrderAction";
-	public static final String SHOPPING_C_A_DELETEORDERNOTEACTION = "com.dotmarketing.portlets.shopping.c.a.DeleteOrderNoteAction";
-	public static final String SHOPPING_C_A_EDITCATEGORYACTION = "com.dotmarketing.portlets.shopping.c.a.EditCategoryAction";
-	public static final String SHOPPING_C_A_EDITITEMACTION = "com.dotmarketing.portlets.shopping.c.a.EditItemAction";
-	public static final String SHOPPING_C_A_EDITLATESTORDERACTION = "com.dotmarketing.portlets.shopping.c.a.EditLatestOrderAction";
-	public static final String SHOPPING_C_A_EDITORDERACTION = "com.dotmarketing.portlets.shopping.c.a.EditOrderAction";
-	public static final String SHOPPING_C_A_FORWARDCHECKOUTACTION = "com.dotmarketing.portlets.shopping.c.a.ForwardCheckoutAction";
-	public static final String SHOPPING_C_A_PAYPALNOTIFICATIONACTION = "com.dotmarketing.portlets.shopping.c.a.PayPalNotificationAction";
-	public static final String SHOPPING_C_A_QUICKADDITEMSACTION = "com.dotmarketing.portlets.shopping.c.a.QuickAddItemsAction";
-    public static final String SHOPPING_C_A_SAVELATESTORDERACTION ="com.dotmarketing.portlets.shopping.c.a.SaveLatestOrderAction";
-	public static final String SHOPPING_C_A_SEARCHACTION = "com.dotmarketing.portlets.shopping.c.a.SearchAction";
-    public static final String SHOPPING_C_A_SENDORDEREMAILACTION ="com.dotmarketing.portlets.shopping.c.a.SendOrderEmailAction";
-    public static final String SHOPPING_C_A_SENDSHIPPINGEMAILACTION = "com.dotmarketing.portlets.shopping.c.a.SendShippingEmailAction";
-	public static final String SHOPPING_C_A_UPDATECARTACTION = "com.dotmarketing.portlets.shopping.c.a.UpdateCartAction";
-	public static final String SHOPPING_C_A_UPDATECATEGORYACTION = "com.dotmarketing.portlets.shopping.c.a.UpdateCategoryAction";
-	public static final String SHOPPING_C_A_UPDATEITEMACTION = "com.dotmarketing.portlets.shopping.c.a.UpdateItemAction";
-    public static final String SHOPPING_C_A_UPDATELATESTORDERACTION = "com.dotmarketing.portlets.shopping.c.a.UpdateLatestOrderAction";
-    public static final String SHOPPING_C_A_UPDATEORDERACTION = "com.dotmarketing.portlets.shopping.c.a.UpdateOrderAction";
-	public static final String SHOPPING_C_A_UPDATEPREFERENCEACTION = "com.dotmarketing.portlets.shopping.c.a.UpdatePreferenceAction";
-	public static final String SHOPPING_C_A_UPDATESHOPPINGCONFIGACTION = "com.dotmarketing.portlets.shopping.c.a.UpdateShoppingConfigAction";
-	public static final String SHOPPING_C_H_CARTHANDLER = "com.dotmarketing.portlets.shopping.c.h.CartHandler";
-	public static final String SHOPPING_URL = "com.dotmarketing.portlets.shopping.URL";
-	public static final String SHOPPING_C_A_HOMEACTION = "com.dotmarketing.portlets.shopping.c.a.ExtranetAction";
 
-	//Polls
-	public static final String POLLS_C_A_ADDVOTEACTION = "com.dotmarketing.portlets.polls.c.a.AddVoteAction";
-	public static final String POLLS_C_A_DELETEQUESTIONACTION = "com.dotmarketing.portlets.polls.c.a.DeleteQuestionAction";
-	public static final String POLLS_C_A_EDITQUESTIONACTION = "com.dotmarketing.portlets.polls.c.a.EditQuestionAction";
-	public static final String POLLS_C_A_UPDATEQUESTIONACTION = "com.dotmarketing.portlets.polls.c.a.UpdateQuestionAction";
-	public static final String POLLS_C_A_VIEWCHARTACTION = "com.dotmarketing.portlets.polls.c.a.ViewChartAction";
-	public static final String POLLS_C_A_VIEWQUESTIONSACTION = "com.dotmarketing.portlets.polls.c.a.ViewQuestionsAction";
-	public static final String POLLS_C_A_VIEWCURRENTQUESTIONSACTION = "com.dotmarketing.portlets.polls.c.a.ViewCurrentQuestionsAction";
-	public static final String POLLS_CATID = "com.dotmarketing.portlets.polls.catid";
-	public static final String POLLS_C_A_DELETECHOICEACTION = "com.dotmarketing.portlets.polls.c.a.DeleteChoiceAction";
-	public static final String POLLS_C_A_EDITCHOICEACTION = "com.dotmarketing.portlets.polls.c.a.EditChoiceAction";
-	public static final String POLLS_C_A_UPDATECHOICEACTION = "com.dotmarketing.portlets.polls.c.a.UpdateChoiceAction";
-	public static final String POLLS_CHOICE = "com.dotmarketing.portlets.polls.choice";
-	public static final String POLLS_C_A_REORDERCHOICESACTION = "com.dotmarketing.portlets.polls.c.a.ReorderChoicesAction";
-
-	//Newsletter
-	public static final String CAMPAIGN_LIST = "com.dotmarketing.campaign.list";
-	public static final String CAMPAIGN_RECURRENT_OCURRENCES = "com.dotmarketing.campaign.recurrent.ocurrences";
-	public static final String CAMPAIGN_EDIT = "com.dotmarketing.campaign.edit";
-	public static final String CLICK_EDIT = "com.dotmarketing.click.edit";
-	public static final String RECIPIENT_LIST = "com.dotmarketing.recipient.list";
-	public static final String RECIPIENT_LIST_TITLE = "com.dotmarketing.recipient.list.title";
-	public static final String RECIPIENT_EDIT = "com.dotmarketing.recipient.edit";
 
     // WORKFLOWS
     public static final String WORKFLOW_TASK_EDIT  = "com.dotmarketing.workflowtask.edit";
@@ -487,66 +435,6 @@ public final class WebKeys {
     // USER FAVORITES
     public static final String USER_FAVORITES = "com.dotmarketing.user_favorites";
 
-    //PRODUCT MANAGER
-    //BACK END
-    public static final String PRODUCT_PRODUCTS_TYPE = "ProductTypes";
-    public static final String PRODUCT_CATEGORIES = "Ecommerce";
-    public static final String PRODUCT_PRODUCT = "product";
-    public static final String PRODUCT_PRODUCT_FORMAT = "productFormat";
-    public static final String PRODUCT_PRODUCT_PRICE = "productPrice";
-    public static final String PRODUCT_SMALL_IMAGE = "smallImage";
-    public static final String PRODUCT_MEDIUM_IMAGE = "mediumImage";
-    public static final String PRODUCT_LARGE_IMAGE = "largeImage";
-    public static final String PRODUCT_FILES = "files";
-    public static final String PRODUCT_RELATED = "relatedProduct";
-
-    //FRONT END
-    public static final String SHOPPING_CART = "shoppingCart";
-    public static final String SHOPPING_CART_ORDER_FORM = "shoppingCartOrderForm";
-    public static final String SHOPPING_CART_FORMAT_INODE = "shoppingCartFormatInode";
-    public static final String SHOPPING_CART_FORMAT_QUANTITY = "shoppingCartFormatQuantity";
-    public static final String SHOPPING_CART_ERRORS = "shoppingCartErrors";
-
-	//Event Registration Manager
-    public static final String WEBEVENTS_REG_VIEW = "com.dotmarketing.webevents.registration.view";
-    public static final String WEBEVENTS_REG_EDIT = "com.dotmarketing.webevents.registration.edit";
-    public static final String WEBEVENTS_REG_FORM = "com.dotmarketing.webevents.registration.form";
-    public static final String WEBEVENT_REG_ATTENDEES = "com.dotmarketing.webevents..registration.attendees";
-    public static final String WEBEVENTS_REG_USER = "com.dotmarketing.webevents.registration.user";
-    public static final String WEBEVENTS_REG_USERID = "com.dotmarketing.webevents.registration.userid";
-    public static final String WEBEVENTS_REG_ATTENDEE_EDIT = "com.dotmarketing.webevents.registration.attendee.edit";
-    public static final String WEBEVENTS_REG_ATTENDEE_FORM = "com.dotmarketing.webevents.registration.attendee.form";
-    public static final String WEBEVENTS_REG_STATUSES = "com.dotmarketing.webevents.registration.statuses";
-    public static final String WEBEVENTS_REG_BEAN = "com.dotmarketing.webevents.registration.bean";
-    public static final String WEBEVENTS_REG_ERRORS = "com.dotmarketing.webevents.registration.errors";
-
-    //Order Manager
-    public static final String ORDER_MGR_VIEW = "com.dotmarketing.order_manager.view";
-    public static final String ORDER_MGR_EDIT = "com.dotmarketing.order_manager.edit";
-    public static final String ORDER_MGR_FORM = "com.dotmarketing.order_manager.form";
-    public static final String ORDER_MGR_ITEMS = "com.dotmarketing.order_manager.items";
-    public static final String ORDER_MGR_ITEM_EDIT = "com.dotmarketing.order_manager.item.edit";
-    public static final String ORDER_MGR_ITEM_FORM = "com.dotmarketing.order_manager.item.form";
-    public static final String ORDER_MGR_STATUSES = "com.dotmarketing.order_manager.statuses";
-    public static final String ORDER_MGR_PAY_STATUSES = "com.dotmarketing.order_manager.pay.statuses";
-
-    //DISCOUNT CODE
-    public static final String DISCOUNTCODE_DISCOUNTS = "discounts";
-    public static final String DISCOUNTCODE_ORDER_BY = "orderby";
-    public static final String DISCOUNTCODE_DIRECTION = "direction";
-    public static final String DISCOUNTCODE_PERCENTAGE = "1";
-    public static final String DISCOUNTCODE_DISCOUNT = "2";
-    public static final String DISCOUNTCODE_PRODUCT_FORMAT = "productFormat";
-    //END DISCOUNT CODE
-
-    public static final String WEBEVENTS_VIEW = "com.dotmarketing.webevents.view";
-    public static final String WEBEVENTS_EDIT = "com.dotmarketing.webevents.edit";
-    public static final String WEBEVENTS_FORM = "com.dotmarketing.webevents.form";
-    public static final String WEBEVENT_CATEGORIES = "com.dotmarketing.webevents.categories";
-    public static final String WEBEVENT_LOCATIONS = "com.dotmarketing.webevents.locations";
-    public static final String WEBEVENTS_LOCATION_EDIT = "com.dotmarketing.webevents.location.edit";
-    public static final String WEBEVENTS_LOCATION_FORM = "com.dotmarketing.webevents.location.form";
-
     //ORGANIZATION
     public static final String ORGANIZATION_OBJECT = "com.dotmarketing.organization.object";
 	public static final String REDIRECT_AFTER_UPDATE_ACCOUNT_INFO = "REDIRECT_AFTER_UPDATE_ACCOUNT_INFO";
@@ -559,12 +447,22 @@ public final class WebKeys {
     //REPORTS
 	public static final String REPORT_EDIT = "com.dotmarketing.report.edit";
 
-	//WIki
-    public static final String WIKI_CONTENTLET = "com.dotmarketing.wiki.contentlet";
-    public static final String WIKI_CONTENTLET_INODE = "com.dotmarketing.wiki.contentlet.inode";
-    public static final String WIKI_IN_WIKI = "com.dotmarketing.wiki.in.wiki";
-    public static final String WIKI_CONTENTLET_URL = "com.dotmarketing.wiki.contentlet.url";
+    
+    //URLMaps
+    public static final String URLMAPPED_ID = "com.dotcms.urlmapped.id";
+    public static final String URLMAPPED_INODE = "com.dotcms.urlmapped.inode";
+    public static final String URLMAPPED_URL = "com.dotcms.urlmapped.url";
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //VISITOR
     public static final String VISITOR = "com.dotcms.visitor";
 

@@ -21,14 +21,23 @@ import org.pmw.tinylog.Logger;
 import org.pmw.tinylog.writers.ConsoleWriter;
 import org.pmw.tinylog.writers.FileWriter;
 
+import com.dotcms.visitor.domain.Visitor;
+import com.dotcms.visitor.domain.VisitorRequest;
+import com.dotmarketing.business.APILocator;
 import com.dotmarketing.business.web.WebAPILocator;
 import com.dotmarketing.filters.CMSFilter;
 import com.dotmarketing.util.WebKeys;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebFilter(urlPatterns = "/*",
     dispatcherTypes = {javax.servlet.DispatcherType.REQUEST, javax.servlet.DispatcherType.FORWARD})
 
 public class AnalyticLoggingFilter implements Filter {
+
+  static final ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(Include.NON_NULL)
+      .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
   @Override
   public void destroy() {
@@ -40,31 +49,45 @@ public class AnalyticLoggingFilter implements Filter {
   @Override
   public void doFilter(ServletRequest sreq, ServletResponse res, FilterChain chain)
       throws IOException, ServletException {
-
+    
+    
+    String x  =
+        "asd";
+    
+    
     chain.doFilter(sreq, res);
     if(sreq instanceof     HttpServletRequest){
-      //configureLogger();
-      HttpServletRequest req = (HttpServletRequest) sreq;
+      HttpServletRequest request =(HttpServletRequest)sreq;
+      Visitor visitor = APILocator.getVisitorAPI().getVisitor(request).get();
+      VisitorRequest vr = APILocator.getVisitorAPI().visitorRequest(request);
       
-      
-      
-      HttpSession session = req.getSession(false);
-      long languageId = WebAPILocator.getLanguageWebAPI().getLanguage(req).getId();
 
-      String uri = (req.getAttribute(WebKeys.CLICKSTREAM_URI_OVERRIDE)!=null) ? (String) req.getAttribute(WebKeys.CLICKSTREAM_URI_OVERRIDE): (String) req.getAttribute(CMSFilter.CMS_FILTER_URI_OVERRIDE);
-
-      
       
       StringWriter sw = new StringWriter();
-      sw.append(req.getRemoteAddr())
+      
+      sw.append("ip:")
+      .append(vr.ipAddress())
       .append('\t')
+      .append("time:")
       .append(String.valueOf(System.currentTimeMillis()))
       .append('\t')
-      .append(req.getMethod())
+      .append("dmid:")
+      .append(vr.dmid())
       .append('\t')
-      .append(uri)
+      .append("uri:")
+      .append(vr.uri())
       .append('\t')
-      .append((String) req.getAttribute(WebKeys.CLICKSTREAM_IDENTIFIER_OVERRIDE));
+      .append("referer:")
+      .append(vr.referer())
+      .append('\t')
+      .append("host:")
+      .append(vr.hostId())
+      .append('\t')
+      .append("pageId:")
+      .append(vr.pageId())
+      .append('\t')
+      .append("contentId:")
+      .append(vr.contentId());
 
       Logger.info(sw.toString());
     }

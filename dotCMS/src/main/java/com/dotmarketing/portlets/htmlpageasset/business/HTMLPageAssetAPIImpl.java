@@ -884,7 +884,7 @@ public class HTMLPageAssetAPIImpl implements HTMLPageAssetAPI {
 
         if (!UtilMethods.isSet(_dotCMSID)) {
             /* create unique generator engine */
-            Cookie idCookie = CookieUtil.createCookie();
+            Cookie idCookie = CookieUtil.createDMIDCookie();
             responseProxy.addCookie(idCookie);
         }
 
@@ -949,7 +949,7 @@ public class HTMLPageAssetAPIImpl implements HTMLPageAssetAPI {
             }
 
             if (UtilMethods.isSet(contentId)) {
-                requestProxy.setAttribute(WebKeys.WIKI_CONTENTLET, contentId);
+                requestProxy.setAttribute(WebKeys.URLMAPPED_ID, contentId);
             }
 
             if (langId != null && langId > 0) {

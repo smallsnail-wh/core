@@ -772,7 +772,7 @@ public class HTMLPageAPIImpl extends BaseWebAssetAPI implements HTMLPageAPI {
 
 		if (!UtilMethods.isSet(_dotCMSID)) {
 			/* create unique generator engine */
-			Cookie idCookie = CookieUtil.createCookie();
+			Cookie idCookie = CookieUtil.createDMIDCookie();
 			responseProxy.addCookie(idCookie);
 		}
 
@@ -847,7 +847,8 @@ public class HTMLPageAPIImpl extends BaseWebAssetAPI implements HTMLPageAPI {
 			}
 
 			if (UtilMethods.isSet(contentId)) {
-				requestProxy.setAttribute(WebKeys.WIKI_CONTENTLET, contentId);
+				requestProxy.setAttribute(WebKeys.URLMAPPED_ID, contentId);
+				
 			}
 
 			if (langId > 0) {

@@ -151,7 +151,7 @@ public class ClickstreamFactory {
 			String _dotCMSID = "";
 			if(!UtilMethods.isSet(UtilMethods.getCookieValue(request.getCookies(),
 					com.dotmarketing.util.WebKeys.LONG_LIVED_DOTCMS_ID_COOKIE))) {
-				CookieUtil.createCookie();
+				CookieUtil.createDMIDCookie();
 
 			}
 			_dotCMSID = UtilMethods.getCookieValue(request.getCookies(),

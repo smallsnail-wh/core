@@ -63,6 +63,7 @@ import com.dotmarketing.util.Constants;
 import com.dotmarketing.util.Logger;
 import com.dotmarketing.util.UtilMethods;
 import com.dotmarketing.util.WebKeys;
+import com.google.common.collect.ImmutableMap;
 import com.liferay.portal.PortalException;
 import com.liferay.portal.SystemException;
 import com.liferay.portal.model.User;
@@ -112,34 +113,35 @@ public class BinaryExporterServlet extends HttpServlet {
         }
 		exportersByPathMapping = new HashMap<String, BinaryContentExporter>();
 
-		Iterator<String> keys = Config.getKeys();
+		String exporters = Config.getStringProperty("CONTENT_EXPORTERS_DOTCMS_CORE", 
+		    "com.dotmarketing.portlets.contentlet.business.exporter.ImageResizeFieldExporter,"
+		    + "com.dotmarketing.portlets.contentlet.business.exporter.RawFieldExporter,"
+		    + "com.dotmarketing.portlets.contentlet.business.exporter.ImageFilterExporter,"
+		    + "com.dotmarketing.portlets.contentlet.business.exporter.ImageThumbnailFieldExporter");
 
-		while(keys.hasNext()) {
-			String key = keys.next();
-			if(key.startsWith("CONTENT_EXPORTERS")) {
-				String[]  exporterClasses = Config.getStringArrayProperty(key);
-				for(String exporterClassName : exporterClasses) {
-					try {
-						Class<BinaryContentExporter> exporterClass = (Class<BinaryContentExporter>) Class.forName(exporterClassName);
-						BinaryContentExporter exporter = exporterClass.newInstance();
-						if(exportersByPathMapping.containsKey(exporter.getPathMapping()))
-							Logger.warn(BinaryExporterServlet.class, "There is already an exporter registered to path " + exporter.getPathMapping() +
-									" this new exporter: " + exporter.getName() + " will replace the previously registered: " +
-									exportersByPathMapping.get(exporter.getPathMapping()).getName());
+        String[]  exporterClasses = exporters.split(",");
+        for(String exporterClassName : exporterClasses) {
+            try {
+                Class<BinaryContentExporter> exporterClass = (Class<BinaryContentExporter>) Class.forName(exporterClassName);
+                BinaryContentExporter exporter = exporterClass.newInstance();
+                if(exportersByPathMapping.containsKey(exporter.getPathMapping()))
+                    Logger.warn(BinaryExporterServlet.class, "There is already an exporter registered to path " + exporter.getPathMapping() +
+                            " this new exporter: " + exporter.getName() + " will replace the previously registered: " +
+                            exportersByPathMapping.get(exporter.getPathMapping()).getName());
 
-						Logger.info(this, "Exporter \"" + exporter.getName() + "\" registered for path /" + exporter.getPathMapping());
-						exportersByPathMapping.put(exporter.getPathMapping(), exporter);
+                Logger.info(this, "Exporter \"" + exporter.getName() + "\" registered for path /" + exporter.getPathMapping());
+                exportersByPathMapping.put(exporter.getPathMapping(), exporter);
 
-					} catch (ClassNotFoundException e) {
-						Logger.warn(BinaryExporterServlet.class, e.getMessage(), e);
-					} catch (InstantiationException e) {
-						Logger.warn(BinaryExporterServlet.class, e.getMessage(), e);
-					} catch (IllegalAccessException e) {
-						Logger.warn(BinaryExporterServlet.class, e.getMessage(), e);
-					}
-				}
-			}
-		}
+            } catch (ClassNotFoundException e) {
+                Logger.warn(BinaryExporterServlet.class, e.getMessage(), e);
+            } catch (InstantiationException e) {
+                Logger.warn(BinaryExporterServlet.class, e.getMessage(), e);
+            } catch (IllegalAccessException e) {
+                Logger.warn(BinaryExporterServlet.class, e.getMessage(), e);
+            }
+        }
+			
+        exportersByPathMapping = ImmutableMap.copyOf(exportersByPathMapping);
 		ImageIO.scanForPlugins();
         final IIORegistry registry = IIORegistry.getDefaultInstance();
         registry.deregisterServiceProvider(registry.getServiceProviderByClass(com.twelvemonkeys.imageio.plugins.svg.SVGImageReaderSpi.class));
@@ -247,6 +249,9 @@ public class BinaryExporterServlet extends HttpServlet {
 					else
 						content = contentAPI.find(assetInode, user, respectFrontendRoles);
 					assetIdentifier = content.getIdentifier();
+			        req.setAttribute(WebKeys.URLMAPPED_ID, assetIdentifier);
+			        req.setAttribute(WebKeys.URLMAPPED_INODE, content.getInode());
+					
 				} else {
 				    boolean live=userWebAPI.isLoggedToFrontend(req);
 				    boolean PREVIEW_MODE = false;

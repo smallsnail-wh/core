@@ -1,6 +1,6 @@
 #set($dojoPath = $webapi.getConfigVar('path.to.dojo'))
 #set ($referer = "$previewPageURL&inode=$HTMLPAGE_INODE&language=${language}")
-#if($UtilMethods.isSet($request.getAttribute("com.dotmarketing.wiki.contentlet")))
+#if($UtilMethods.isSet($request.getAttribute("com.dotcms.urlmapped.id")))
 	#if($UtilMethods.isSet($request.getAttribute("com.dotmarketing.clickstream.uri.override")))
 		#set($referer =	"$request.getAttribute('com.dotmarketing.clickstream.uri.override')?")
 	#end
@@ -513,8 +513,8 @@
 	 	document.getElementById('contentlet').value=y;
 		form = document.getElementById('submitParent');
 		form.cmd.value="edit";
-		#if($UtilMethods.isSet($request.getAttribute("com.dotmarketing.wiki.contentlet.url")))
-			document.getElementById('referer').value="$request.getAttribute('com.dotmarketing.wiki.contentlet.url')";
+		#if($UtilMethods.isSet($request.getAttribute("com.dotcms.urlmapped.url")))
+			document.getElementById('referer').value="$request.getAttribute('com.dotcms.urlmapped.url')";
 		#end
 		form.submit();
 	}
@@ -533,8 +533,8 @@
 		form = document.getElementById('submitParent');
         form.cmd.value="moveDown";
         ##DOTCMS-5363
-		#if($UtilMethods.isSet($request.getAttribute("com.dotmarketing.wiki.contentlet.url")))
-			document.getElementById('referer').value="$request.getAttribute('com.dotmarketing.wiki.contentlet.url')";
+		#if($UtilMethods.isSet($request.getAttribute("com.dotcms.urlmapped.url")))
+			document.getElementById('referer').value="$request.getAttribute('com.dotcms.urlmapped.url')";
 		#end
         form.submit();
 	}
@@ -547,8 +547,8 @@
 		form = document.getElementById('submitParent');
         form.cmd.value="moveUp";
         ##DOTCMS-5363
-		#if($UtilMethods.isSet($request.getAttribute("com.dotmarketing.wiki.contentlet.url")))
-			document.getElementById('referer').value="$request.getAttribute('com.dotmarketing.wiki.contentlet.url')";
+		#if($UtilMethods.isSet($request.getAttribute("com.dotcms.urlmapped.url")))
+			document.getElementById('referer').value="$request.getAttribute('com.dotcms.urlmapped.url')";
 		#end
         form.submit();
 

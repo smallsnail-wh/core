@@ -106,8 +106,9 @@ public class CharsetEncodingFilter implements Filter {
 	        }
 	
         }
+        DotHttpServletRequestWrapper dwrap = new DotHttpServletRequestWrapper((HttpServletRequest)request);
         
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(dwrap, response);
 	}
 	
 	public void destroy() {

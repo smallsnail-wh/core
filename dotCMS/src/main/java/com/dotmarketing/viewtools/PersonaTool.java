@@ -71,10 +71,11 @@ public class PersonaTool implements ViewTool {
 		Optional<Visitor> visitor = APILocator.getVisitorAPI().getVisitor(request, true);
 		try {
 			persona = find(id);
-			visitor.get().setPersona(persona);
+			APILocator.getVisitorAPI().setPersona(persona, request);
+
 		} catch (Exception  e) {
 			Logger.debug(this.getClass(), e.getMessage());
-			visitor.get().setPersona(null);
+			APILocator.getVisitorAPI().setPersona(null, request);
 			return null;
 		}
 		

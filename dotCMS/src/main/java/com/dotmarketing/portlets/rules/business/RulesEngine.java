@@ -19,6 +19,7 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Provides the entry point to trigger the execution of user-specified Rules for
@@ -159,8 +160,11 @@ public final class RulesEngine {
 	@SuppressWarnings("unchecked")
 	private static void trackFiredRule(Rule firedRule, HttpServletRequest req) {
 		FiredRulesList firedRulesRequest = (FiredRulesList) req.getAttribute(WebKeys.RULES_ENGINE_FIRE_LIST);
-		FiredRulesList firedRulesSession = (FiredRulesList) req.getSession(true).getAttribute(WebKeys.RULES_ENGINE_FIRE_LIST);
-
+		HttpSession session = req.getSession(false);
+		FiredRulesList firedRulesSession = null;
+		if(session!=null){
+		  firedRulesSession = (FiredRulesList) req.getSession(false).getAttribute(WebKeys.RULES_ENGINE_FIRE_LIST);
+		}
 
 		if (!UtilMethods.isSet(firedRulesRequest)) {
 			firedRulesRequest = new FiredRulesList();
@@ -169,7 +173,9 @@ public final class RulesEngine {
 
 		if (!UtilMethods.isSet(firedRulesSession)) {
 			firedRulesSession = new FiredRulesList();
-			req.getSession(true).setAttribute(WebKeys.RULES_ENGINE_FIRE_LIST, firedRulesSession);
+			if(session!=null){
+			  req.getSession(true).setAttribute(WebKeys.RULES_ENGINE_FIRE_LIST, firedRulesSession);
+			}
 		}
 
 		Date now = new Date();

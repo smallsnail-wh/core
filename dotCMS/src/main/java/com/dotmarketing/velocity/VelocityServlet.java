@@ -431,34 +431,17 @@ public abstract class VelocityServlet extends HttpServlet {
     		request.setAttribute("idInode", String.valueOf(ident.getInode()));
     		Logger.debug(VelocityServlet.class, "VELOCITY HTML INODE=" + ident.getInode());
 
-			Optional<Visitor> visitor = visitorAPI.getVisitor(request);
+			Optional<Visitor> optVisitor = visitorAPI.getVisitor(request);
 
 			boolean newVisitor = false;
 			boolean newVisit = false;
 
-    		/*
-    		 * JIRA http://jira.dotmarketing.net/browse/DOTCMS-4659
-    		//Set long lived cookie regardless of who this is */
-    		String _dotCMSID = UtilMethods.getCookieValue(request.getCookies(),
-    				com.dotmarketing.util.WebKeys.LONG_LIVED_DOTCMS_ID_COOKIE);
-
-    		if (!UtilMethods.isSet(_dotCMSID)) {
-    			// create unique generator engine
-    			Cookie idCookie = CookieUtil.createCookie();
-				_dotCMSID = idCookie.getValue();
-    			response.addCookie(idCookie);
-				newVisitor = true;
-
-				if(visitor.isPresent()) {
-				  
-				    visitor = ImmutableVisitor.copyOf(visitor.get()).withDmid(_dotCMSID);
-				  
-				  
-					visitor.get().setDmid(UUID.fromString(_dotCMSID));
-				}
-
-    		}
-
+			if(optVisitor.isPresent() ){
+    		    String _dotCMSID = optVisitor.get().dmid();
+      			Cookie idCookie = CookieUtil.createDMIDCookie(_dotCMSID);
+      			response.addCookie(idCookie);
+  				newVisitor = optVisitor.get().newVisitor();
+			}
             String _oncePerVisitCookie = UtilMethods.getCookieValue(request.getCookies(),
                     WebKeys.ONCE_PER_VISIT_COOKIE);
 
@@ -573,7 +556,7 @@ public abstract class VelocityServlet extends HttpServlet {
     		// Begin page caching
     		String userId = (user != null) ? user.getUserId() : "PUBLIC";
     		String language = String.valueOf(currentLanguageId);
-    		String urlMap = (String) request.getAttribute(WebKeys.WIKI_CONTENTLET_INODE);
+    		String urlMap = (String) request.getAttribute(WebKeys.URLMAPPED_INODE);
     		String queryString = request.getQueryString();
     		String persona = null;
     		Optional<Visitor> v = APILocator.getVisitorAPI().getVisitor(request, false);
@@ -599,11 +582,11 @@ public abstract class VelocityServlet extends HttpServlet {
     				return;
     			}
     		}
-    
+
     		Writer out = (buildCache) ? new StringWriter(4096) : new VelocityFilterWriter(response.getWriter());
     		//get the context from the requst if possible
     		Context context = VelocityUtil.getWebContext(request, response);
-    		request.setAttribute("velocityContext", context);
+
     		Logger.debug(VelocityServlet.class, "HTMLPage Identifier:" + ident.getInode());
 
     		try {

@@ -584,7 +584,8 @@ public class VelocityUtil {
 		} else {
 			htmlPage = (IHTMLPage) APILocator.getVersionableAPI().findWorkingVersion(id, APILocator.getUserAPI().getSystemUser(), false);
 		}
-
+        request.setAttribute(WebKeys.HTMLPAGE_INODE, htmlPage.getInode());
+        request.setAttribute(WebKeys.HTMLPAGE_ID, htmlPage.getIdentifier());
 		return htmlPage;
 	}
 

@@ -248,10 +248,9 @@ public class URLMapFilter implements Filter {
 						if(optSession !=null){
 							optSession.setAttribute(com.dotmarketing.util.WebKeys.HTMLPAGE_LANGUAGE,String.valueOf(conAPI.find(c.getInode(), user, true).getLanguageId()));
 						}
-						request.setAttribute(WebKeys.WIKI_CONTENTLET, c.getIdentifier());
-						request.setAttribute(WebKeys.WIKI_CONTENTLET_INODE, c.getInode());
-						request.setAttribute(WebKeys.CLICKSTREAM_IDENTIFIER_OVERRIDE, c.getIdentifier());
-						request.setAttribute(WebKeys.WIKI_CONTENTLET_URL, url);
+						request.setAttribute(WebKeys.URLMAPPED_ID, c.getIdentifier());
+						request.setAttribute(WebKeys.URLMAPPED_INODE, c.getInode());
+						request.setAttribute(WebKeys.URLMAPPED_URL, url);
 						String[] x = url.split("/");
 						for(int i=0;i<x.length;i++){
 							if(UtilMethods.isSet(x[i])){

@@ -33,19 +33,21 @@ public class CookieUtil {
      * 
      * @return
      */
-    public static Cookie createCookie() {
+    public static Cookie createDMIDCookie(String dmid) {
 		// set id cookie
-		String _dotCMSID = UUIDGenerator.generateUuid();
+		dmid = (dmid==null)  ?  UUIDUtil.uuidTimeBased() : dmid;
 		Cookie idCookie = new Cookie(
 				com.dotmarketing.util.WebKeys.LONG_LIVED_DOTCMS_ID_COOKIE,
-				_dotCMSID);
+				dmid);
 		idCookie.setPath(URI);
 		idCookie.setMaxAge(MAX_AGE_DAY_MILLIS * 356 * 5);
-
 		return idCookie;
 
 	}
-
+    
+    public static Cookie createDMIDCookie() {
+      return createDMIDCookie(null);
+    }
     /**
      * 
      * @return

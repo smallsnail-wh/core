@@ -22,8 +22,8 @@
 #end
 
 ##DOTCMS-5365
-#if($UtilMethods.isSet($request.getAttribute("com.dotmarketing.wiki.contentlet.url")))
-    #set($VTLSERVLET_URI =  $request.getAttribute("com.dotmarketing.wiki.contentlet.url"))
+#if($UtilMethods.isSet($request.getAttribute("com.dotcms.urlmapped.url")))
+    #set($VTLSERVLET_URI =  $request.getAttribute("com.dotcms.urlmapped.url"))
 #end
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -248,8 +248,8 @@
     function viewDiff(){
 		var varHTMLPage = document.getElementById("htmlPage").value;
 		
-        #if($UtilMethods.isSet($request.getAttribute('com.dotmarketing.wiki.contentlet')))
-            parent.frameMain.location="/html/portlet/ext/htmlpages/view_live_working_diff.jsp?id=" + varHTMLPage + "&contentId=$request.getAttribute('com.dotmarketing.wiki.contentlet')";
+        #if($UtilMethods.isSet($request.getAttribute('com.dotcms.urlmapped.id')))
+            parent.frameMain.location="/html/portlet/ext/htmlpages/view_live_working_diff.jsp?id=" + varHTMLPage + "&contentId=$request.getAttribute('com.dotcms.urlmapped.id')";
         #else
             parent.frameMain.location="/html/portlet/ext/htmlpages/view_live_working_diff.jsp?id=" + varHTMLPage;
         #end
