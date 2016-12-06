@@ -56,8 +56,8 @@ public class AnalyticLoggingFilter implements Filter {
       Visitor visitor = APILocator.getVisitorAPI().getVisitor(request).get();
       VisitorRequest vr = APILocator.getVisitorAPI().visitorRequest(request);
       
-
-      
+      Logger.info(System.identityHashCode(visitor)+"" );
+      Logger.info(visitor);
       StringWriter sw = new StringWriter();
       
       sw.append("ip:")
@@ -84,8 +84,8 @@ public class AnalyticLoggingFilter implements Filter {
       .append("contentId:")
       .append(vr.contentId());
 
-      Logger.info(sw.toString());
-      Logger.info(vr);
+      //Logger.info(sw.toString());
+      //Logger.info(vr);
     }
 
   }

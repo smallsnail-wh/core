@@ -15,7 +15,7 @@ import org.apache.velocity.tools.view.tools.ViewTool;
 
 import com.dotcms.visitor.domain.AccruedTag;
 import com.dotcms.visitor.domain.Visitor;
-
+import com.dotcms.visitor.domain.VisitorWrapper;
 import com.dotmarketing.beans.Host;
 import com.dotmarketing.business.APILocator;
 import com.dotmarketing.business.web.UserWebAPI;
@@ -493,7 +493,7 @@ public class ContentTool implements ViewTool {
 		
 
 		StringWriter buff  = new StringWriter().append(query);
-		Visitor visitor = opt.get();
+		VisitorWrapper visitor = (VisitorWrapper) opt.get();
 		IPersona p = visitor.getPersona();
 		List<AccruedTag> tags = visitor.getAccruedTags();
 		if(p==null && (tags==null || tags.size()==0)){

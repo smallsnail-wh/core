@@ -161,6 +161,7 @@ public class VisitorAPIImpl implements VisitorAPI {
         .queryString(request.getQueryString())
         .userId(visitor.userId())
         .contentId(contentId)
+        .visitor(visitor)
         .uri(uri)
         .pageId(pageId)
         .languageId(languageId)
@@ -193,7 +194,7 @@ public class VisitorAPIImpl implements VisitorAPI {
       }
     }
 
-    return ImmutableVisitor.copyOf(visitor).withPersona(persona);
+    return new VisitorWrapper( ImmutableVisitor.copyOf(visitor).withPersona(persona));
   }
 
   @Override
@@ -204,6 +205,12 @@ public class VisitorAPIImpl implements VisitorAPI {
 
   @Override
   public Visitor setVisitor(Visitor visitor, HttpServletRequest request) {
+
+    if(!(visitor instanceof VisitorWrapper)){
+      
+      visitor = new VisitorWrapper(visitor);
+      
+    }
     request.getSession().setAttribute(WebKeys.VISITOR, visitor);
     return visitor;
   }

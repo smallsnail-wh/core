@@ -23,6 +23,10 @@ public abstract class VisitorRequest implements Serializable {
 
   public abstract String uri();
 
+  public abstract Visitor visitor();
+  
+  
+  
   @Nullable
   public abstract String queryString();
 

@@ -12,6 +12,7 @@ import java.util.Set;
 import com.dotcms.repackage.com.google.common.collect.HashMultiset;
 import com.dotcms.repackage.com.google.common.collect.Multiset;
 import com.dotcms.repackage.com.google.common.collect.Multisets;
+import com.dotmarketing.business.DotStateException;
 import com.dotmarketing.portlets.languagesmanager.model.Language;
 import com.dotmarketing.portlets.personas.model.IPersona;
 import com.google.common.collect.ImmutableList;
@@ -21,9 +22,16 @@ import eu.bitwalker.useragentutils.UserAgent;
 
 public class VisitorWrapper extends Visitor {
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
   Visitor _visitor;
 
   public VisitorWrapper(Visitor visitor) {
+    if(visitor instanceof VisitorWrapper){
+      throw new DotStateException("can't wrap a VisitorWrapper");
+    }
     _setVisitor(visitor);
   }
 
@@ -174,6 +182,12 @@ public class VisitorWrapper extends Visitor {
   public String toString() {
     return _visitor.toString();
   }
-  
+
+  @Override
+  public int hashCode() {
+
+    return _visitor.hashCode();
+  }
+
   
 }

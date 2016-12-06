@@ -2,6 +2,7 @@ package com.dotmarketing.util;
 
 import com.dotcms.repackage.com.google.common.collect.Sets;
 import com.dotcms.visitor.domain.Visitor;
+import com.dotcms.visitor.domain.VisitorWrapper;
 import com.dotmarketing.business.APILocator;
 import com.dotmarketing.tag.model.Tag;
 
@@ -97,7 +98,7 @@ public class TagUtil {
         Set<String> tagsSet = Sets.newHashSet(foundTags);
 
         //Accrue the found tags
-        visitor.addAccruedTags(tagsSet);
+        ((VisitorWrapper) visitor).addAccruedTags(tagsSet);
     }
 
 }

@@ -4,6 +4,7 @@ import com.dotcms.repackage.com.google.common.annotations.VisibleForTesting;
 import com.dotcms.rest.exception.InvalidRuleParameterException;
 import com.dotcms.visitor.business.VisitorAPI;
 import com.dotcms.visitor.domain.Visitor;
+import com.dotcms.visitor.domain.VisitorWrapper;
 import com.dotmarketing.business.APILocator;
 import com.dotmarketing.portlets.rules.RuleComponentInstance;
 import com.dotmarketing.portlets.rules.exception.RuleEvaluationFailedException;
@@ -61,7 +62,7 @@ public class VisitorTagsActionlet extends RuleActionlet<VisitorTagsActionlet.Ins
         try {
             Optional<Visitor> opt = visitorAPI.getVisitor(request);
             if(opt.isPresent()) {
-                Visitor visitor = opt.get();
+                VisitorWrapper visitor =(VisitorWrapper) opt.get();
                 for (String tag : instance.options.split(",")) {
                     visitor.addTag(tag);
                 }

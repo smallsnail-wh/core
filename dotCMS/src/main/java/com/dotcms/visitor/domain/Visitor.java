@@ -1,24 +1,18 @@
 package com.dotcms.visitor.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nullable;
 
 import org.immutables.value.Value;
 
-import com.dotcms.repackage.com.google.common.collect.HashMultiset;
-import com.dotcms.repackage.com.google.common.collect.Multiset;
-import com.dotcms.repackage.com.google.common.collect.Multisets;
 import com.dotmarketing.portlets.languagesmanager.model.Language;
 import com.dotmarketing.portlets.personas.model.IPersona;
 import com.dotmarketing.util.UUIDUtil;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import eu.bitwalker.useragentutils.DeviceType;
@@ -44,7 +38,8 @@ public abstract class Visitor implements Serializable {
     return UUIDUtil.uuidTimeBased();
   }
 
-  Multiset<String> _accruedTags = HashMultiset.create();
+  
+  public abstract List<String> accruedTagsRaw();
 
   public abstract UserAgent userAgent();
 
@@ -60,10 +55,6 @@ public abstract class Visitor implements Serializable {
     return new Date();
   }
 
-  private Map<String, Serializable> map = ImmutableMap.of();
-
-
-  Set<String> pagesViewed = ImmutableSet.of();
 
   String getIpAddress() {
     return ipAddress();
@@ -76,56 +67,10 @@ public abstract class Visitor implements Serializable {
     return locale();
   }
 
-
-
   public IPersona getPersona() {
     return persona();
   }
 
-
-  public abstract List<AccruedTag> accruedTags();
-
-
-
-  public List<AccruedTag> getAccruedTags() {
-    List<AccruedTag> tags = new ArrayList<>();
-    for (String key : Multisets.copyHighestCountFirst(_accruedTags).elementSet()) {
-      AccruedTag tag = new AccruedTag(key, _accruedTags.count(key));
-      tags.add(tag);
-    }
-    return tags;
-  }
-
-  public List<AccruedTag> getTags() {
-    return getAccruedTags();
-  }
-
-  public void addAccruedTags(Set<String> tags) {
-    for (String tag : tags) {
-      addTag(tag);
-    }
-    // _accruedTags.addAll(tags);
-  }
-
-  public void addTag(String tag) {
-    if (tag == null)
-      return;
-    _accruedTags.add(tag);
-  }
-
-  public void addTag(String tag, int count) {
-    if (tag == null)
-      return;
-    _accruedTags.add(tag, count);
-  }
-
-  public void removeTag(String tag) {
-    _accruedTags.remove(tag);
-  }
-
-  public void clearTags() {
-    _accruedTags = HashMultiset.create();
-  }
 
   public UserAgent getUserAgent() {
     return this.userAgent();
@@ -160,16 +105,7 @@ public abstract class Visitor implements Serializable {
     return lastRequestDate();
   }
 
-
-  public void put(String key, Serializable value) {
-    map = ImmutableMap.<String, Serializable>builder().putAll(map).put(key, value).build();
-
-  }
-
-  public Serializable get(String key) {
-    return map.get(key);
-  }
-
+  Set<String> pagesViewed = ImmutableSet.of();
 
 
   @Value.Derived
