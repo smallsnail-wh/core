@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLConnection;
 import java.util.Random;
+
+import com.dotcms.visitor.domain.ImmutableVisitor;
 import com.dotcms.visitor.domain.Visitor;
 
 import static org.junit.Assert.assertEquals;
@@ -48,7 +50,7 @@ public class PagesViewedConditionletFTest {
         }
 
         session = request.getSession(true);
-        session.setAttribute(WebKeys.VISITOR, new Visitor());
+        session.setAttribute(WebKeys.VISITOR, ImmutableVisitor.builder().build());
     }
 
     @After

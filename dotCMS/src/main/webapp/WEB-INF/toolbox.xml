@@ -208,16 +208,8 @@
 		<scope>application</scope>
 		<class>com.dotmarketing.util.Config</class>
 	 </tool>
-	 <tool>
-		<key>rating</key>
-		<scope>request</scope>
-		<class>com.dotmarketing.viewtools.RatingWebAPI</class>
-	 </tool>
-	 <tool>
-		<key>alertMessagesWebAPI</key>
-		<scope>request</scope>
-		<class>com.dotmarketing.util.AlertMessagesWebAPI</class>
-	 </tool>
+
+
 	<tool>
 		<key>favorites</key>
 		<scope>request</scope>

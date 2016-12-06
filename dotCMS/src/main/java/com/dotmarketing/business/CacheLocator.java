@@ -32,8 +32,6 @@ import com.dotmarketing.plugin.business.PluginCache;
 import com.dotmarketing.plugin.business.PluginCacheImpl;
 import com.dotmarketing.portlets.categories.business.CategoryCache;
 import com.dotmarketing.portlets.categories.business.CategoryCacheImpl;
-import com.dotmarketing.portlets.chains.business.ChainCache;
-import com.dotmarketing.portlets.chains.business.ChainCacheImpl;
 import com.dotmarketing.portlets.containers.business.ContainerCache;
 import com.dotmarketing.portlets.containers.business.ContainerCacheImpl;
 import com.dotmarketing.portlets.contentlet.business.ContentletCache;
@@ -187,10 +185,6 @@ public class CacheLocator extends Locator<CacheIndex>{
 
 	public static DotResourceCache getVeloctyResourceCache(){
 		return (DotResourceCache)getInstance(CacheIndex.Velocity);
-	}
-
-	public static ChainCache getChainCache(){
-		return (ChainCache)getInstance(CacheIndex.Chain);
 	}
 
     public static LogMapperCache getLogMapperCache () {
@@ -408,7 +402,6 @@ enum CacheIndex
       	case Contentlet: return new ContentletCacheImpl();
       	case Velocity : return new DotResourceCache();
       	case Relationship: return new RelationshipCacheImpl();
-      	case Chain : return new ChainCacheImpl();
         case LogMapper: return new LogMapperCacheImpl();
       	case Plugin : return new PluginCacheImpl();
       	case Language : return new LanguageCacheImpl();

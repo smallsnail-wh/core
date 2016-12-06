@@ -49,11 +49,12 @@ public class CMSFilter implements Filter {
 	CmsUrlUtil urlUtil = CmsUrlUtil.getInstance();
 
 
-	enum IAm{
+	public enum IAm{
 		PAGE,
 		FOLDER,
 		FILE,
 		VANITY_URL,
+		API,
 		NOTHING_IN_THE_CMS
 	}
 
@@ -62,7 +63,7 @@ public class CMSFilter implements Filter {
 	public static final String CMS_INDEX_PAGE = Config.getStringProperty("CMS_INDEX_PAGE", "index");
 	public static final String CMS_FILTER_IDENTITY = "CMS_FILTER_IDENTITY";
 	public static final String CMS_FILTER_URI_OVERRIDE = "CMS_FILTER_URLMAP_OVERRIDE";
-
+    public static final String CMS_FILTER_IAM = "CMS FILTER_IAM";
 
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -81,10 +82,6 @@ public class CMSFilter implements Filter {
 			response.sendRedirect(xssRedirect);
 			return;
 		}
-
-
-
-		IAm iAm = IAm.NOTHING_IN_THE_CMS;
 
 		LogFactory.getLog(this.getClass()).debug("CMS Filter URI = " + uri);
 
@@ -118,17 +115,10 @@ public class CMSFilter implements Filter {
 		long languageId = WebAPILocator.getLanguageWebAPI().getLanguage(request).getId();
 
 
-
-		if (urlUtil.isFileAsset(uri, host, languageId)) {
-			iAm= IAm.FILE;
-		} else if (urlUtil.isVanityUrl(uri, host)) {
-			iAm = IAm.VANITY_URL;
-		} else if (urlUtil.isPageAsset(uri, host, languageId)) {
-			iAm = IAm.PAGE;
-		} else if (urlUtil.isFolder(uri, host)) {
-			iAm = IAm.FOLDER;
-		}
-
+		IAm iAm = urlUtil.whatAmI(uri, host, languageId);
+		
+		
+		
 		String rewrite = null;
 		String queryString = request.getQueryString();
 		// if a vanity URL
@@ -162,7 +152,7 @@ public class CMSFilter implements Filter {
 				}
 			}
 		}
-
+		request.setAttribute(CMS_FILTER_IAM, iAm);
 		if (iAm == IAm.FOLDER) {
 			if (!uri.endsWith("/")) {
 				// If the value comes from the uri override attribute, used it, if not use the same uri as the

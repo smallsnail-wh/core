@@ -5,7 +5,6 @@ import java.util.GregorianCalendar;
 
 import com.dotmarketing.db.HibernateUtil;
 import com.dotmarketing.exception.DotHibernateException;
-import com.dotmarketing.portlets.campaigns.factories.CampaignFactory;
 import com.dotmarketing.util.Logger;
 
 
@@ -20,16 +19,6 @@ public class CronThread implements Runnable {
 	    Logger.info(this, "Starting annoying CronThread running every minute");
         
         GregorianCalendar greg = null;
-
-        /* unlock all email
-         * campaigns in case
-         * we died in the midst of sending
-         */
-        try {
-			CampaignFactory.unlockAllCampaigns();
-		} catch (DotHibernateException e1) {
-			Logger.error(this,e1.getMessage(), e1);
-		}
 
         //Fire up the cron thread
         while (true) {

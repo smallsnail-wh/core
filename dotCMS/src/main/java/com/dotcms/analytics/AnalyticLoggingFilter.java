@@ -50,11 +50,6 @@ public class AnalyticLoggingFilter implements Filter {
   public void doFilter(ServletRequest sreq, ServletResponse res, FilterChain chain)
       throws IOException, ServletException {
     
-    
-    String x  =
-        "asd";
-    
-    
     chain.doFilter(sreq, res);
     if(sreq instanceof     HttpServletRequest){
       HttpServletRequest request =(HttpServletRequest)sreq;
@@ -90,6 +85,7 @@ public class AnalyticLoggingFilter implements Filter {
       .append(vr.contentId());
 
       Logger.info(sw.toString());
+      Logger.info(vr);
     }
 
   }

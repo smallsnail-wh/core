@@ -26,7 +26,7 @@ import com.dotmarketing.init.DotInitScheduler;
 import com.dotmarketing.loggers.mbeans.Log4jConfig;
 import com.dotmarketing.menubuilders.RefreshMenus;
 import com.dotmarketing.plugin.PluginLoader;
-import com.dotmarketing.portlets.campaigns.factories.CampaignFactory;
+
 import com.dotmarketing.portlets.contentlet.action.ImportAuditUtil;
 import com.dotmarketing.portlets.contentlet.business.HostAPI;
 import com.dotmarketing.portlets.languagesmanager.business.LanguageAPI;
@@ -223,18 +223,6 @@ public class InitServlet extends HttpServlet {
          */
 
         deleteFiles(new File(SystemUtils.JAVA_IO_TMPDIR));
-
-        /*
-         * unlocking campaigns
-         */
-        try {
-			CampaignFactory.unlockAllCampaigns();
-		} catch (DotHibernateException e2) {
-			Logger.error(InitServlet.class, e2.getMessage(), e2);
-			throw new ServletException("Unable to Unlock Campaigns", e2);
-		}
-
-        // runs the InitThread
 
         InitThread it = new InitThread();
         it.start();

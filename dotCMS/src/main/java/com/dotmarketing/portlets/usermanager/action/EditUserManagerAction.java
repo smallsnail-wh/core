@@ -181,9 +181,6 @@ public class EditUserManagerAction extends DotPortletAction{
 								BeanUtils.copyProperties(searchForm, address);
 								BeanUtils.copyProperties(searchForm, userProxy);
 
-								if(UtilMethods.isSet(httpReq.getSession().getAttribute(WebKeys.WEBEVENTS_REG_USER))){
-									httpReq.getSession().setAttribute(WebKeys.WEBEVENTS_REG_USERID,userId);
-								}
 
 								SessionMessages.add(req, "message", "message.usermanager.saved");
 								HttpSession session = httpReq.getSession();
@@ -212,9 +209,6 @@ public class EditUserManagerAction extends DotPortletAction{
 								referer = com.dotmarketing.util.PortletURLUtil.getRenderURL(httpReq,
 										WindowState.MAXIMIZED.toString(), params);
 
-								if(UtilMethods.isSet(httpReq.getSession().getAttribute(WebKeys.WEBEVENTS_REG_USER))){
-									referer = URLDecoder.decode((String) httpReq.getSession().getAttribute(WebKeys.WEBEVENTS_REG_USER),"UTF-8");
-								}
 								_sendToReferral(req,res,referer);
 							}
 							HibernateUtil.commitTransaction();

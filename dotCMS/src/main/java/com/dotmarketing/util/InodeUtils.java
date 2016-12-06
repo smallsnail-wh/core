@@ -1,5 +1,10 @@
 package com.dotmarketing.util;
 
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.dotmarketing.beans.Identifier;
 import com.dotmarketing.beans.Inode;
 import com.dotmarketing.beans.UserProxy;
@@ -7,11 +12,7 @@ import com.dotmarketing.common.db.DotConnect;
 import com.dotmarketing.db.DbConnectionFactory;
 import com.dotmarketing.exception.DotDataException;
 import com.dotmarketing.factories.InodeFactory;
-import com.dotmarketing.portlets.campaigns.model.Campaign;
-import com.dotmarketing.portlets.campaigns.model.Click;
-import com.dotmarketing.portlets.campaigns.model.Recipient;
 import com.dotmarketing.portlets.categories.model.Category;
-import com.dotmarketing.portlets.communications.model.Communication;
 import com.dotmarketing.portlets.containers.model.Container;
 import com.dotmarketing.portlets.contentlet.business.Contentlet;
 import com.dotmarketing.portlets.folders.model.Folder;
@@ -27,11 +28,6 @@ import com.dotmarketing.portlets.virtuallinks.model.VirtualLink;
 import com.dotmarketing.portlets.workflows.model.WorkflowComment;
 import com.dotmarketing.portlets.workflows.model.WorkflowHistory;
 import com.dotmarketing.portlets.workflows.model.WorkflowTask;
-
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class InodeUtils {
 
@@ -140,14 +136,6 @@ public class InodeUtils {
 
 		else if (type.equals("category")) {
 			return Category.class;
-		} else if (type.equals("click")) {
-			return Click.class;
-		} else if (type.equals("recipient")) {
-			return Recipient.class;
-		} else if (type.equals("communication")) {
-			return Communication.class;
-		} else if (type.equals("campaign")) {
-			return Campaign.class;
 		} else if (type.equals("template")) {
 			return Template.class;
 		} else if (type.equals("containers")) {

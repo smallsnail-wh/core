@@ -8,6 +8,7 @@ import com.dotmarketing.business.PermissionAPI;
 import com.dotmarketing.business.Versionable;
 import com.dotmarketing.cache.VirtualLinksCache;
 import com.dotmarketing.exception.DotDataException;
+import com.dotmarketing.filters.CMSFilter.IAm;
 import com.dotmarketing.portlets.contentlet.model.Contentlet;
 import com.dotmarketing.portlets.contentlet.model.ContentletVersionInfo;
 import com.dotmarketing.portlets.languagesmanager.model.Language;
@@ -33,6 +34,34 @@ public class CmsUrlUtil {
 		return urlUtil;
 	}
 
+	
+	public IAm whatAmI(String uri, Host host, long languageId){
+      if (urlUtil.isFileAsset(uri, host, languageId)) {
+          return IAm.FILE;
+      } else if (urlUtil.isVanityUrl(uri, host)) {
+          return IAm.VANITY_URL;
+      } else if (urlUtil.isPageAsset(uri, host, languageId)) {
+          return IAm.PAGE;
+      } else if (urlUtil.isFolder(uri, host)) {
+          return IAm.FOLDER;
+      } else if (urlUtil.isApi(uri)){
+        return IAm.API;
+      }
+      else{
+        return IAm.NOTHING_IN_THE_CMS;
+      }
+	}
+	
+	
+    public boolean isApi(String uri) {
+      try {
+          return uri.startsWith("/api/") || uri.startsWith("/contentAsset/");
+      } catch (Exception e) {
+          return false;
+      }
+    }
+	
+	
 	
 	public boolean isPageAsset(Versionable asset) {
 		try {

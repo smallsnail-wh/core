@@ -13,6 +13,14 @@ public class AccruedTag implements Serializable {
        this.tag = tag;
        this.count=count;
   }
+  
+  public AccruedTag ( AccruedTag tag){
+    this.tag = tag.tag;
+    this.count=tag.count + 1;
+}
+  
+  
+  
   public String getTag() {
       return tag;
   }

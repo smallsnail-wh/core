@@ -1,9 +1,6 @@
 package com.dotcms.visitor.business;
 
 import java.io.UnsupportedEncodingException;
-import java.net.InetAddress;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -14,19 +11,18 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.dotcms.repackage.org.apache.logging.log4j.util.Strings;
 import com.dotcms.util.DotPreconditions;
 import com.dotcms.util.HttpRequestDataUtil;
 import com.dotcms.visitor.domain.ImmutableVisitor;
 import com.dotcms.visitor.domain.ImmutableVisitorRequest;
 import com.dotcms.visitor.domain.Visitor;
 import com.dotcms.visitor.domain.VisitorRequest;
+import com.dotcms.visitor.domain.VisitorWrapper;
 import com.dotmarketing.beans.Host;
 import com.dotmarketing.business.APILocator;
 import com.dotmarketing.business.web.LanguageWebAPI;
 import com.dotmarketing.business.web.WebAPILocator;
 import com.dotmarketing.exception.DotDataException;
-import com.dotmarketing.filters.CMSFilter;
 import com.dotmarketing.portlets.languagesmanager.model.Language;
 import com.dotmarketing.portlets.personas.model.IPersona;
 import com.dotmarketing.portlets.personas.model.Persona;
@@ -80,7 +76,7 @@ public class VisitorAPIImpl implements VisitorAPI {
       session.setAttribute(WebKeys.VISITOR, visitor);
     }
 
-    return Optional.of(visitor);
+    return Optional.of(new VisitorWrapper(visitor));
   }
 
   
@@ -117,7 +113,7 @@ public class VisitorAPIImpl implements VisitorAPI {
 
     
     
-    return visitor;
+    return new VisitorWrapper(visitor);
   }
   
   
@@ -155,7 +151,6 @@ public class VisitorAPIImpl implements VisitorAPI {
         host = new Host();
       }
     }
-
     String pageId = (String) request.getAttribute(WebKeys.HTMLPAGE_ID);
     String contentId = (String) request.getAttribute(WebKeys.URLMAPPED_ID);
 
@@ -241,7 +236,7 @@ public class VisitorAPIImpl implements VisitorAPI {
         .referer(request.getHeader("Referer"))
         .userAgent(userAgent).build();
     events.created(visitor);
-    return visitor;
+    return new VisitorWrapper(visitor);
 
   }
 
