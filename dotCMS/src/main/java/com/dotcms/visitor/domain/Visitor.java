@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 
 import org.immutables.value.Value;
 
+import com.dotmarketing.business.DotStateException;
 import com.dotmarketing.portlets.languagesmanager.model.Language;
 import com.dotmarketing.portlets.personas.model.IPersona;
 import com.dotmarketing.util.UUIDUtil;
@@ -37,7 +38,11 @@ public abstract class Visitor implements Serializable {
   public String id() {
     return UUIDUtil.uuidTimeBased();
   }
-
+  
+  @Value.Default
+  public void setPersona(IPersona persona) {
+    throw new DotStateException("Unimplemented method");
+  }
   
   public abstract List<String> accruedTagsRaw();
 

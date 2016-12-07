@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 
 import org.immutables.value.Value;
 
+import com.dotmarketing.filters.CMSFilter;
+
 import eu.bitwalker.useragentutils.UserAgent;
 
 @Value.Immutable
@@ -19,6 +21,10 @@ public abstract class VisitorRequest implements Serializable {
   public abstract String ipAddress();
   public abstract String serverName();
 
+  public abstract CMSFilter.IAm iAm();
+  
+  
+  
   public abstract int serverPort();
 
   public abstract String uri();

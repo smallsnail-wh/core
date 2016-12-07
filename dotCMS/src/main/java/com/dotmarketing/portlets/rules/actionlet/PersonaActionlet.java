@@ -5,6 +5,7 @@ import com.dotcms.repackage.com.google.common.base.Preconditions;
 import com.dotcms.repackage.org.apache.commons.lang.StringUtils;
 import com.dotcms.visitor.business.VisitorAPI;
 import com.dotcms.visitor.domain.Visitor;
+import com.dotcms.visitor.domain.VisitorWrapper;
 import com.dotmarketing.business.APILocator;
 import com.dotmarketing.business.UserAPI;
 import com.dotmarketing.portlets.personas.business.PersonaAPI;
@@ -72,8 +73,9 @@ public class PersonaActionlet extends RuleActionlet<PersonaActionlet.Instance> {
                     Logger.warn(PersonaActionlet.class, "Persona with id '" + instance.personaId + "' not be found. Could not execute action.");
                     result = false;
                 } else {
-                   // opt.get().setPersona(p);
-                    result = true;
+                  
+                  opt.get().setPersona(p);
+                  result = true;
                 }
             } else{
                 Logger.warn(PersonaActionlet.class, "No visitor was available on which to set a persona. Could not execute action.");

@@ -18,8 +18,10 @@ public interface VisitorAPI {
 
     Visitor setPersona(IPersona persona,HttpServletRequest request );
 
-    Visitor setVisitor(Visitor visitor, HttpServletRequest request);
+    Visitor setVisitor( HttpServletRequest request,Visitor visitor);
 
     VisitorRequest visitorRequest(HttpServletRequest request);
+
+    Visitor setPersona(Visitor visitor, IPersona persona);
 
 }

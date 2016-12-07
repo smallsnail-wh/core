@@ -23,6 +23,7 @@ import com.dotmarketing.business.APILocator;
 import com.dotmarketing.business.web.LanguageWebAPI;
 import com.dotmarketing.business.web.WebAPILocator;
 import com.dotmarketing.exception.DotDataException;
+import com.dotmarketing.filters.CMSFilter;
 import com.dotmarketing.portlets.languagesmanager.model.Language;
 import com.dotmarketing.portlets.personas.model.IPersona;
 import com.dotmarketing.portlets.personas.model.Persona;
@@ -75,8 +76,8 @@ public class VisitorAPIImpl implements VisitorAPI {
     if (!Objects.isNull(session)) {
       session.setAttribute(WebKeys.VISITOR, visitor);
     }
-
-    return Optional.of(new VisitorWrapper(visitor));
+    visitor= (visitor instanceof VisitorWrapper) ? visitor : new VisitorWrapper(visitor);
+    return Optional.of(visitor);
   }
 
   
@@ -112,8 +113,8 @@ public class VisitorAPIImpl implements VisitorAPI {
     events.updated(origVisitor, visitor);
 
     
-    
-    return new VisitorWrapper(visitor);
+    return (visitor instanceof VisitorWrapper) ? visitor : new VisitorWrapper(visitor);
+
   }
   
   
@@ -139,6 +140,7 @@ public class VisitorAPIImpl implements VisitorAPI {
       Logger.warn(this.getClass(), e2.getMessage());
     }
     
+    CMSFilter.IAm iAm = request.getAttribute(CMSFilter.CMS_FILTER_IAM) !=null ? (CMSFilter.IAm) request.getAttribute(CMSFilter.CMS_FILTER_IAM) : CMSFilter.IAm.NOTHING_IN_THE_CMS;
     Visitor visitor = getVisitor(request, false).get();
 
     Host host;
@@ -163,6 +165,7 @@ public class VisitorAPIImpl implements VisitorAPI {
         .contentId(contentId)
         .visitor(visitor)
         .uri(uri)
+        .iAm(iAm)
         .pageId(pageId)
         .languageId(languageId)
         .hostId(host.getIdentifier())
@@ -176,7 +179,8 @@ public class VisitorAPIImpl implements VisitorAPI {
   }
 
 
-  private Visitor setPersona(Visitor visitor, IPersona persona) {
+  @Override
+  public Visitor setPersona(Visitor visitor, IPersona persona) {
     // Validate if we must accrue the Tags for this "new" Persona
     if (persona != null
         && (visitor.persona() == null || !visitor.persona().getIdentifier().equals(persona.getIdentifier()))) {
@@ -200,17 +204,14 @@ public class VisitorAPIImpl implements VisitorAPI {
   @Override
   public Visitor setPersona(IPersona persona, HttpServletRequest request) {
     Visitor visitor = getVisitor(request).get();
-    return setPersona(visitor, persona);
+    visitor.setPersona(persona);
+    return visitor;
   }
 
   @Override
-  public Visitor setVisitor(Visitor visitor, HttpServletRequest request) {
+  public Visitor setVisitor( HttpServletRequest request, Visitor visitor) {
 
-    if(!(visitor instanceof VisitorWrapper)){
-      
-      visitor = new VisitorWrapper(visitor);
-      
-    }
+    visitor= (visitor instanceof VisitorWrapper) ? visitor : new VisitorWrapper(visitor);
     request.getSession().setAttribute(WebKeys.VISITOR, visitor);
     return visitor;
   }

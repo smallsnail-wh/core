@@ -57,7 +57,8 @@ public class AnalyticLoggingFilter implements Filter {
       VisitorRequest vr = APILocator.getVisitorAPI().visitorRequest(request);
       
       Logger.info(System.identityHashCode(visitor)+"" );
-      Logger.info(visitor);
+      Logger.info(vr.iAm());
+      //Logger.info(visitor);
       StringWriter sw = new StringWriter();
       
       sw.append("ip:")

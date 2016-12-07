@@ -12,6 +12,7 @@ import java.util.Set;
 import com.dotcms.repackage.com.google.common.collect.HashMultiset;
 import com.dotcms.repackage.com.google.common.collect.Multiset;
 import com.dotcms.repackage.com.google.common.collect.Multisets;
+import com.dotmarketing.business.APILocator;
 import com.dotmarketing.business.DotStateException;
 import com.dotmarketing.portlets.languagesmanager.model.Language;
 import com.dotmarketing.portlets.personas.model.IPersona;
@@ -58,7 +59,13 @@ public class VisitorWrapper extends Visitor {
     this._visitor = visitor;
 
   }
+  
+  @Override
+  public void setPersona(IPersona persona) {
+    this._visitor = APILocator.getVisitorAPI().setPersona(_visitor, persona);
 
+  }
+  
   @Override
   public String ipAddress() {
     return _visitor.ipAddress();
