@@ -7,6 +7,7 @@ import com.dotcms.repackage.org.apache.commons.lang.StringUtils;
 import com.dotcms.util.GeoIp2CityDbUtil;
 import com.dotcms.util.HttpRequestDataUtil;
 import com.dotcms.visitor.business.VisitorAPI;
+import com.dotcms.visitor.domain.PersonifiedVisitor;
 import com.dotcms.visitor.domain.Visitor;
 import com.dotmarketing.business.APILocator;
 import com.dotmarketing.business.UserAPI;
@@ -75,7 +76,7 @@ public class PersonaConditionlet extends Conditionlet<PersonaConditionlet.Instan
             Optional<Visitor> opt = visitorAPI.getVisitor(request);
             if(opt.isPresent()){
                 Visitor visitor = opt.get();
-                Persona currentPersona = (Persona) visitor.getPersona();
+                Persona currentPersona = (Persona) new PersonifiedVisitor(visitor).persona();
                 User user = userAPI.getSystemUser();
                 Persona inputPersona = personaAPI.find(instance.personaId, user, false);
 

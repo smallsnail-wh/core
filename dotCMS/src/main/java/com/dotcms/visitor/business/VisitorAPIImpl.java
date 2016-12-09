@@ -3,6 +3,8 @@ package com.dotcms.visitor.business;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -13,11 +15,14 @@ import javax.servlet.http.HttpSession;
 
 import com.dotcms.util.DotPreconditions;
 import com.dotcms.util.HttpRequestDataUtil;
+import com.dotcms.visitor.domain.DMIDVisitor;
 import com.dotcms.visitor.domain.ImmutableVisitor;
 import com.dotcms.visitor.domain.ImmutableVisitorRequest;
+import com.dotcms.visitor.domain.PersonifiedVisitor;
+import com.dotcms.visitor.domain.TaggedVisitor;
+import com.dotcms.visitor.domain.UserVisitor;
 import com.dotcms.visitor.domain.Visitor;
 import com.dotcms.visitor.domain.VisitorRequest;
-import com.dotcms.visitor.domain.VisitorWrapper;
 import com.dotmarketing.beans.Host;
 import com.dotmarketing.business.APILocator;
 import com.dotmarketing.business.web.LanguageWebAPI;
@@ -30,10 +35,10 @@ import com.dotmarketing.portlets.personas.model.Persona;
 import com.dotmarketing.tag.model.Tag;
 import com.dotmarketing.util.Config;
 import com.dotmarketing.util.Logger;
-import com.dotmarketing.util.TagUtil;
 import com.dotmarketing.util.UUIDUtil;
 import com.dotmarketing.util.UtilMethods;
 import com.dotmarketing.util.WebKeys;
+import com.google.common.collect.Lists;
 import com.liferay.portal.model.User;
 
 import eu.bitwalker.useragentutils.UserAgent;
@@ -42,19 +47,20 @@ public class VisitorAPIImpl implements VisitorAPI {
 
   private LanguageWebAPI languageWebAPI = WebAPILocator.getLanguageWebAPI();
   private static final String ANON_USER = "anonymous";
-  private static final VisitorEvents events= new VisitorEvents();
+  private static final VisitorEvents events = new VisitorEvents();
+
   @Override
   public void setLanguageWebAPI(LanguageWebAPI languageWebAPI) {
     this.languageWebAPI = languageWebAPI;
   }
 
   @Override
-  public Optional<Visitor>  getVisitor(HttpServletRequest request) {
+  public Optional<Visitor> getVisitor(HttpServletRequest request) {
     return getVisitor(request, Config.getBooleanProperty("CREATE_VISITOR_OBJECT_IN_SESSION", false));
   }
 
   @Override
-  public Optional<Visitor>  getVisitor(HttpServletRequest request, boolean persistInSession) {
+  public Optional<Visitor> getVisitor(HttpServletRequest request, boolean persistInSession) {
 
     DotPreconditions.checkNotNull(request, IllegalArgumentException.class, "Null Request");
 
@@ -70,77 +76,70 @@ public class VisitorAPIImpl implements VisitorAPI {
     }
 
     visitor = updateVisitor(request, visitor);
-    
+
 
     request.setAttribute(WebKeys.VISITOR, visitor);
     if (!Objects.isNull(session)) {
       session.setAttribute(WebKeys.VISITOR, visitor);
     }
-    visitor= (visitor instanceof VisitorWrapper) ? visitor : new VisitorWrapper(visitor);
+
     return Optional.of(visitor);
   }
 
-  
-  private Visitor updateVisitor(HttpServletRequest request,final Visitor origVisitor){
-    
-    
-    Visitor visitor=origVisitor;
-    
+
+  private Visitor updateVisitor(HttpServletRequest request, final Visitor origVisitor) {
+
+
+    Visitor visitor = origVisitor;
+
     // if we change userId (aka login)
-    String userId = ANON_USER;
+    User user = null;
     try {
-      userId = WebAPILocator.getUserWebAPI().getLoggedInUser(request).getUserId();
+      user = WebAPILocator.getUserWebAPI().getLoggedInUser(request);
     } catch (Exception e) {
-      
+
     }
-    if(!userId.equals(visitor.userId())){
-      visitor = ImmutableVisitor.copyOf(visitor).withUserId(userId);
+    if (user!=null && !user.equals(new UserVisitor(visitor).user())) {
+      visitor = new UserVisitor(visitor, user);
     }
-    
+
 
     // If we are forcing a persona on a visitor
-    if(request.getParameter(WebKeys.CMS_PERSONA_PARAMETER)!=null){
+    if (request.getParameter(WebKeys.CMS_PERSONA_PARAMETER) != null) {
       try {
-        User user = com.liferay.portal.util.PortalUtil.getUser(request);
-        Persona p = APILocator.getPersonaAPI().find(request.getParameter(WebKeys.CMS_PERSONA_PARAMETER), user, true);
-        visitor = setPersona(visitor, p);
+        User myUser = com.liferay.portal.util.PortalUtil.getUser(request);
+        Persona persona =
+            APILocator.getPersonaAPI().find(request.getParameter(WebKeys.CMS_PERSONA_PARAMETER), myUser, true);
+        visitor = new PersonifiedVisitor(visitor, persona);
       } catch (Exception e) {
-        visitor = setPersona(visitor, null);
+        visitor = new PersonifiedVisitor(visitor, null);
       }
     }
-    
-    
-    events.updated(origVisitor, visitor);
 
-    
-    return (visitor instanceof VisitorWrapper) ? visitor : new VisitorWrapper(visitor);
+
+
+    return visitor;
 
   }
-  
-  
-  
-  
-  
-  
-  
+
+
+
   @Override
   public VisitorRequest visitorRequest(HttpServletRequest request) {
 
 
     long languageId = WebAPILocator.getLanguageWebAPI().getLanguage(request).getId();
 
-    String uri=request.getRequestURI();
+    String uri = request.getRequestURI();
     try {
-      uri = URLDecoder.decode(
-          (request.getAttribute("javax.servlet.forward.request_uri")!=null) 
-              ? (String) request.getAttribute("javax.servlet.forward.request_uri") 
-                      : request.getRequestURI()
-          , "UTF-8");
+      uri = URLDecoder.decode((request.getAttribute("javax.servlet.forward.request_uri") != null)
+          ? (String) request.getAttribute("javax.servlet.forward.request_uri") : request.getRequestURI(), "UTF-8");
     } catch (UnsupportedEncodingException e2) {
       Logger.warn(this.getClass(), e2.getMessage());
     }
-    
-    CMSFilter.IAm iAm = request.getAttribute(CMSFilter.CMS_FILTER_IAM) !=null ? (CMSFilter.IAm) request.getAttribute(CMSFilter.CMS_FILTER_IAM) : CMSFilter.IAm.NOTHING_IN_THE_CMS;
+
+    CMSFilter.IAm iAm = request.getAttribute(CMSFilter.CMS_FILTER_IAM) != null
+        ? (CMSFilter.IAm) request.getAttribute(CMSFilter.CMS_FILTER_IAM) : CMSFilter.IAm.NOTHING_IN_THE_CMS;
     Visitor visitor = getVisitor(request, false).get();
 
     Host host;
@@ -156,12 +155,14 @@ public class VisitorAPIImpl implements VisitorAPI {
     String pageId = (String) request.getAttribute(WebKeys.HTMLPAGE_ID);
     String contentId = (String) request.getAttribute(WebKeys.URLMAPPED_ID);
 
-    VisitorRequest vr = ImmutableVisitorRequest.builder()
-        .protocol(request.getProtocol())
+    String dmid = new DMIDVisitor(visitor).dmid();
+    
+    
+    VisitorRequest vr = ImmutableVisitorRequest.builder().protocol(request.getProtocol())
         .serverName(request.getServerName())
         .serverPort(request.getServerPort())
         .queryString(request.getQueryString())
-        .userId(visitor.userId())
+        .userId(new UserVisitor(visitor).user().getUserId())
         .contentId(contentId)
         .visitor(visitor)
         .uri(uri)
@@ -169,12 +170,11 @@ public class VisitorAPIImpl implements VisitorAPI {
         .pageId(pageId)
         .languageId(languageId)
         .hostId(host.getIdentifier())
-        .userAgentHeader( request.getHeader("User-Agent"))
-        .userAgent(visitor.getUserAgent())
-        .dmid(visitor.dmid())
+        .userAgentHeader(request.getHeader("User-Agent"))
+        .userAgent(visitor.userAgent())
+        .dmid(dmid)
         .ipAddress(visitor.ipAddress())
-        .referer(request.getHeader("referer"))
-        .build();
+        .referer(request.getHeader("referer")).build();
     return vr;
   }
 
@@ -182,36 +182,38 @@ public class VisitorAPIImpl implements VisitorAPI {
   @Override
   public Visitor setPersona(Visitor visitor, IPersona persona) {
     // Validate if we must accrue the Tags for this "new" Persona
-    if (persona != null
-        && (visitor.persona() == null || !visitor.persona().getIdentifier().equals(persona.getIdentifier()))) {
-
-      try {
-        // The Persona changed for this Visitor, we must accrue the tags associated to this new
-        // Persona
-        List<Tag> personaTags = APILocator.getTagAPI().getTagsByInode(persona.getInode());
-
-        String foundTags = TagUtil.tagListToString(personaTags);
-        // Accrue these found tags to this visitor object
-        TagUtil.accrueTagsToVisitor(visitor, foundTags);
-      } catch (DotDataException e) {
-        Logger.error(this, "Unable to retrieve Tags associated to Persona [" + persona.getInode() + "].", e);
+    visitor = new PersonifiedVisitor(visitor, persona);
+    try {
+      // The Persona changed for this Visitor, we must accrue the tags associated to this new
+      // Persona
+      List<Tag> personaTags = APILocator.getTagAPI().getTagsByInode(persona.getInode());
+      List<String> tagStr = new ArrayList<>();
+      for (Tag tag : personaTags) {
+        tagStr.add(tag.getTagName());
       }
+
+      // Accrue these found tags to this visitor object
+      visitor = new TaggedVisitor(visitor, tagStr);
+      visitor = new PersonifiedVisitor(visitor, persona);
+    } catch (DotDataException e) {
+      Logger.error(this, "Unable to retrieve Tags associated to Persona [" + persona.getInode() + "].", e);
     }
 
-    return new VisitorWrapper( ImmutableVisitor.copyOf(visitor).withPersona(persona));
+    return visitor;
+
   }
 
   @Override
-  public Visitor setPersona(IPersona persona, HttpServletRequest request) {
+  public Visitor setPersona(HttpServletRequest request, IPersona persona) {
     Visitor visitor = getVisitor(request).get();
-    visitor.setPersona(persona);
+
+    visitor = setPersona(visitor, persona);
     return visitor;
   }
 
   @Override
-  public Visitor setVisitor( HttpServletRequest request, Visitor visitor) {
+  public Visitor setVisitor(HttpServletRequest request, Visitor visitor) {
 
-    visitor= (visitor instanceof VisitorWrapper) ? visitor : new VisitorWrapper(visitor);
     request.getSession().setAttribute(WebKeys.VISITOR, visitor);
     return visitor;
   }
@@ -228,23 +230,18 @@ public class VisitorAPIImpl implements VisitorAPI {
 
     UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
 
-    String dmid = lookupDMID(request);
-    boolean isNewVisitor = (dmid == null);
-    if (dmid == null) {
-      dmid = UUIDUtil.uuidTimeBased();
-    }
+    
 
-    Visitor visitor =
-        ImmutableVisitor.builder()
-        .ipAddress(ipAddress)
-        .language(language)
-        .locale(locale)
-        .dmid(dmid.toString())
-        .newVisitor(isNewVisitor)
-        .referer(request.getHeader("Referer"))
-        .userAgent(userAgent).build();
-    events.created(visitor);
-    return new VisitorWrapper(visitor);
+    Visitor visitor = ImmutableVisitor.builder().ipAddress(ipAddress).language(language).locale(locale)
+        .referer(request.getHeader("Referer")).userAgent(userAgent).build();
+
+    String dmid = lookupDMID(request);
+
+
+    visitor = new DMIDVisitor(visitor, dmid);
+    
+    
+    return new TaggedVisitor(visitor);
 
   }
 
@@ -261,12 +258,51 @@ public class VisitorAPIImpl implements VisitorAPI {
     return address;
   }
 
-  private String lookupDMID(HttpServletRequest request) {
+  @Override
+  public String lookupDMID(HttpServletRequest request) {
     String dmidStr = UtilMethods.getCookieValue(request.getCookies(), WebKeys.LONG_LIVED_DOTCMS_ID_COOKIE);
-    return dmidStr;
+    return dmidStr==null ? UUIDUtil.uuidTimeBased() : dmidStr;
   }
 
+  /**
+   * Method that accrues a given {@link Tag} List to the current {@link Visitor}
+   *
+   * @param request HttpServletRequest object required in order to find the current {@link Visitor}
+   * @param tags {@link Tag} list to accrue
+   */
+  @Override
+  public Visitor accrueTags(HttpServletRequest request, Collection<String> tags) {
+    Visitor visitor = getVisitor(request).get();
+    return accrueTags(visitor, tags);
+
+  }
+  
+  @Override
+  public Visitor accrueTags(HttpServletRequest request, String tags) {
+    Visitor visitor = getVisitor(request).get();
+    return accrueTags(visitor, tags);
+
+  }
+
+  @Override
+  public Visitor accrueTags(Visitor visitor, Collection<String> tags) {
+
+    return new TaggedVisitor(visitor, tags);
 
 
+  }
+
+  /**
+   * Method that accrues a given String of tag names with a CSV format to the given {@link Visitor}
+   *
+   * @param visitor {@link Visitor} to accrue the given tags
+   * @param tags String of tag names with a CSV format to accrue
+   */
+  @Override
+  public Visitor accrueTags(Visitor visitor, String tags) {
+
+    return new TaggedVisitor(visitor, tags);
+
+  }
 
 }

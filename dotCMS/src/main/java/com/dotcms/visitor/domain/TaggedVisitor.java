@@ -1,114 +1,44 @@
 package com.dotcms.visitor.domain;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 import com.dotcms.repackage.com.google.common.collect.HashMultiset;
 import com.dotcms.repackage.com.google.common.collect.Multiset;
 import com.dotcms.repackage.com.google.common.collect.Multisets;
-import com.dotmarketing.business.APILocator;
-import com.dotmarketing.business.DotStateException;
-import com.dotmarketing.portlets.languagesmanager.model.Language;
-import com.dotmarketing.portlets.personas.model.IPersona;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
-import eu.bitwalker.useragentutils.UserAgent;
+public class TaggedVisitor extends AbstractVisitor {
 
-public class VisitorWrapper extends Visitor {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
-  Visitor _visitor;
-
-  public VisitorWrapper(Visitor visitor) {
-    if(visitor instanceof VisitorWrapper){
-      throw new DotStateException("can't wrap a VisitorWrapper");
-    }
-    _setVisitor(visitor);
-  }
-
-  private Map<String, Serializable> _map = ImmutableMap.of();
-
-  public void put(String key, Serializable value) {
-    _map = ImmutableMap.<String, Serializable>builder().putAll(_map).put(key, value).build();
-  }
-
-  public Serializable get(String key) {
-    return _map.get(key);
-  }
-
-  public void remove(String key) {
-    Map<String, Serializable> map = new HashMap<>();
-    map.putAll(_map);
-    map.remove(key);
-
-
-    _map = ImmutableMap.copyOf(map);
-  }
-
-  public void _setVisitor(Visitor visitor) {
-    this._visitor = visitor;
-
-  }
   
-  @Override
-  public void setPersona(IPersona persona) {
-    this._visitor = APILocator.getVisitorAPI().setPersona(_visitor, persona);
-
-  }
+  private static final String ACCRUED_TAGS = "accruedTags";
   
-  @Override
-  public String ipAddress() {
-    return _visitor.ipAddress();
+
+
+  public TaggedVisitor(Visitor visitor) {
+    super(visitor);
+    List<String> accruedTags =  map.containsKey(ACCRUED_TAGS)? (List) map.get(ACCRUED_TAGS) : new ArrayList<>();
+    map.put(ACCRUED_TAGS, accruedTags);
   }
 
-  @Override
-  public Language language() {
-    return _visitor.language();
+
+  public TaggedVisitor(Visitor visitor, Collection<String> tags) {
+    this(visitor);
+    addAccruedTags(tags);
   }
 
-  @Override
-  public Locale locale() {
-    return _visitor.locale();
+  public TaggedVisitor(Visitor visitor, String tags) {
+    this(visitor, Arrays.asList(((tags==null) ? "" : tags).split(",")));
   }
 
-  @Override
-  public IPersona persona() {
-    return _visitor.persona();
-  }
-
-  @Override
-  public UserAgent userAgent() {
-    return _visitor.userAgent();
-  }
-
-  @Override
-  public String dmid() {
-    return _visitor.dmid();
-  }
-
-  @Override
-  public boolean newVisitor() {
-    return _visitor.newVisitor();
-  }
-
-  @Override
-  public String referer() {
-    return _visitor.referer();
-  }
 
   public List<AccruedTag> getAccruedTags() {
     Multiset<String> myMultiset = HashMultiset.create();
-    myMultiset.addAll(_visitor.accruedTagsRaw());
+    myMultiset.addAll(accrued());
     List<AccruedTag> tags = new ArrayList<>();
     for (String key : Multisets.copyHighestCountFirst(myMultiset).elementSet()) {
       AccruedTag tag = new AccruedTag(key, myMultiset.count(key));
@@ -117,57 +47,54 @@ public class VisitorWrapper extends Visitor {
     return tags;
   }
 
+
+  public List<String> accrued() {
+    return (List<String>) map.get(ACCRUED_TAGS);
+  }
+  
+  
+  
   public List<AccruedTag> getTags() {
     return getAccruedTags();
   }
 
-  public void addAccruedTags(Set<String> addingTags) {
-
-    List<String> newTags = new ArrayList<>();
-    newTags.addAll(addingTags);
-    newTags.addAll(_visitor.accruedTagsRaw());
-
-    _visitor = ImmutableVisitor.builder().from(_visitor).accruedTagsRaw(newTags).build();
-  }
-
-  public void addTag(String tag) {
-    if (tag == null)
-      return;
-    List<String> newTags = new ArrayList<>();
-    newTags.add(tag);
-    newTags.addAll(_visitor.accruedTagsRaw());
-
-    _visitor = ImmutableVisitor.builder().from(_visitor).accruedTagsRaw(newTags).build();
-  }
-
-  public void addTag(String tag, int count) {
-    if (tag == null)
-      return;
-    List<String> newTags = new ArrayList<>();
-    newTags.addAll(_visitor.accruedTagsRaw());
-    removeTag(tag);
-    for (int j = 0; j < count; j++) {
-      newTags.add(tag);
+  public TaggedVisitor addAccruedTags(Collection<String> addingTags) {
+    
+    for(String x :addingTags ){
+      if(x!=null) accrued().add(x.trim());
     }
 
-    _visitor = ImmutableVisitor.builder().from(_visitor).accruedTagsRaw(newTags).build();
+    return this;
   }
 
-  public void removeTag(String tag) {
-    List<String> newTags = new ArrayList<>();
-    newTags.addAll(_visitor.accruedTagsRaw());
-    Iterator<String> i = newTags.iterator();
+  public TaggedVisitor addTag(String tag) {
+    if (tag != null && tag.trim().length()>0)
+      accrued().add(tag.trim());
+    return this;
+  }
+
+  public TaggedVisitor addTag(String tag, int count) {
+
+    for (int j = 0; j < count; j++) {
+      accrued().add(tag);
+    }
+    return this;
+  }
+
+  public TaggedVisitor removeTag(String tag) {
+
+    Iterator<String> i = accrued().iterator();
     while (i.hasNext()) {
       String oldTag = i.next();
       if (tag.equalsIgnoreCase(oldTag))
         i.remove();
     }
-
-    _visitor = ImmutableVisitor.builder().from(_visitor).accruedTagsRaw(newTags).build();
+    return this;
   }
 
-  public void clearTags() {
-    _visitor = ImmutableVisitor.builder().from(_visitor).accruedTagsRaw(ImmutableList.of()).build();
+  public TaggedVisitor clearTags() {
+    accrued().clear();
+    return this;
   }
 
 
@@ -175,26 +102,8 @@ public class VisitorWrapper extends Visitor {
     return getAccruedTags();
   }
 
-  @Override
-  public List<String> accruedTagsRaw() {
-    return _visitor.accruedTagsRaw();
+  private List<String> accruedTagsRaw() {
+    return accrued();
   }
 
-  @Override
-  public boolean equals(Object obj) {
-    return _visitor.equals(obj);
-  }
-
-  @Override
-  public String toString() {
-    return _visitor.toString();
-  }
-
-  @Override
-  public int hashCode() {
-
-    return _visitor.hashCode();
-  }
-
-  
 }

@@ -265,7 +265,11 @@ public class URLMapFilter implements Filter {
 							List<Tag> contentletFoundTags = APILocator.getTagAPI().getTagsByInode(c.getInode());
 							if ( contentletFoundTags != null ) {
 								//Accrue the found tags
-								TagUtil.accrueTags(request, contentletFoundTags);
+							    List<String> tags = new ArrayList<>();
+							    for(Tag tag: contentletFoundTags){
+							      tags.add(tag.getTagName());
+							    }
+								APILocator.getVisitorAPI().accrueTags(request, tags);
 							}
 						}
 

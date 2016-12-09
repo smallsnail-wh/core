@@ -1,12 +1,15 @@
 package com.dotcms.visitor.business;
 
+import java.util.Collection;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.dotcms.visitor.domain.Visitor;
 import com.dotcms.visitor.domain.Visitor;
 import com.dotcms.visitor.domain.VisitorRequest;
 import com.dotmarketing.business.web.LanguageWebAPI;
 import com.dotmarketing.portlets.personas.model.IPersona;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 public interface VisitorAPI {
 
@@ -16,12 +19,25 @@ public interface VisitorAPI {
 
     Optional<Visitor> getVisitor(HttpServletRequest request, boolean create);
 
-    Visitor setPersona(IPersona persona,HttpServletRequest request );
 
     Visitor setVisitor( HttpServletRequest request,Visitor visitor);
 
     VisitorRequest visitorRequest(HttpServletRequest request);
 
     Visitor setPersona(Visitor visitor, IPersona persona);
+    Visitor setPersona(HttpServletRequest request,IPersona persona );
+
+    
+    Visitor accrueTags(Visitor visitor, String tags);
+
+    Visitor accrueTags(HttpServletRequest request, Collection<String> tags);
+
+    Visitor accrueTags(Visitor visitor, Collection<String> tags);
+
+    Visitor accrueTags(HttpServletRequest request, String tags);
+
+    String lookupDMID(HttpServletRequest request);
+
+
 
 }

@@ -89,7 +89,7 @@ public class GeoIp2CityDbUtil {
 	 *             If the connection to the GeoIP2 database file cannot be
 	 *             established.
 	 */
-	private GeoIp2CityDbUtil(String databasePath) {
+	public GeoIp2CityDbUtil(String databasePath) {
 		dbPath = databasePath;
 		File database = new File(databasePath);
 		connectToDatabase(database);
@@ -137,7 +137,7 @@ public class GeoIp2CityDbUtil {
 	 * @return The {@link DatabaseReader} object with the latest content of the
 	 *         database.
 	 */
-	private static DatabaseReader getDatabaseReader() {
+	public static DatabaseReader getDatabaseReader() {
 		File database = new File(dbPath);
 		long fileLastModified = database.lastModified();
 		if (fileLastModified != lastModified) {

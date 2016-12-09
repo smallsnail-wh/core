@@ -11,6 +11,7 @@ import org.apache.velocity.tools.view.tools.ViewTool;
 
 import com.dotcms.repackage.bsh.util.Util;
 import com.dotcms.visitor.domain.Visitor;
+import com.dotcms.visitor.domain.Visitor;
 import com.dotmarketing.beans.Host;
 import com.dotmarketing.business.APILocator;
 import com.dotmarketing.business.web.WebAPILocator;
@@ -71,11 +72,11 @@ public class PersonaTool implements ViewTool {
 		Optional<Visitor> visitor = APILocator.getVisitorAPI().getVisitor(request, true);
 		try {
 			persona = find(id);
-			APILocator.getVisitorAPI().setPersona(persona, request);
+			APILocator.getVisitorAPI().setPersona(request, persona);
 
 		} catch (Exception  e) {
 			Logger.debug(this.getClass(), e.getMessage());
-			APILocator.getVisitorAPI().setPersona(null, request);
+			APILocator.getVisitorAPI().setPersona(request, null);
 			return null;
 		}
 		

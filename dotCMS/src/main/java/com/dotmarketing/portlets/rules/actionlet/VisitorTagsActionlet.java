@@ -1,10 +1,18 @@
 package com.dotmarketing.portlets.rules.actionlet;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.dotcms.repackage.com.google.common.annotations.VisibleForTesting;
 import com.dotcms.rest.exception.InvalidRuleParameterException;
 import com.dotcms.visitor.business.VisitorAPI;
+import com.dotcms.visitor.domain.TaggedVisitor;
 import com.dotcms.visitor.domain.Visitor;
-import com.dotcms.visitor.domain.VisitorWrapper;
 import com.dotmarketing.business.APILocator;
 import com.dotmarketing.portlets.rules.RuleComponentInstance;
 import com.dotmarketing.portlets.rules.exception.RuleEvaluationFailedException;
@@ -12,12 +20,6 @@ import com.dotmarketing.portlets.rules.model.ParameterModel;
 import com.dotmarketing.portlets.rules.parameter.ParameterDefinition;
 import com.dotmarketing.portlets.rules.parameter.display.RestDropdownInput;
 import com.dotmarketing.util.Config;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Actionlet to add tags to the visitor object.
@@ -62,10 +64,8 @@ public class VisitorTagsActionlet extends RuleActionlet<VisitorTagsActionlet.Ins
         try {
             Optional<Visitor> opt = visitorAPI.getVisitor(request);
             if(opt.isPresent()) {
-                VisitorWrapper visitor =(VisitorWrapper) opt.get();
-                for (String tag : instance.options.split(",")) {
-                    visitor.addTag(tag);
-                }
+                Visitor taggedVisitor = new TaggedVisitor(opt.get(), instance.options);
+ 
                 result = true;
             } else {
                 throw new RuleEvaluationFailedException("No visitor was available. Could not execute action.");

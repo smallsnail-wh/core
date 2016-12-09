@@ -4,6 +4,8 @@ import com.dotcms.TestBase;
 import com.dotcms.repackage.com.google.common.collect.Maps;
 import com.dotcms.visitor.business.VisitorAPI;
 import com.dotcms.visitor.domain.Visitor;
+import com.dotcms.visitor.domain.PersonifiedVisitor;
+import com.dotcms.visitor.domain.Visitor;
 import com.dotmarketing.business.APILocator;
 import com.dotmarketing.business.UserAPI;
 import com.dotmarketing.exception.DotDataException;
@@ -43,7 +45,7 @@ public class PersonaActionletTest extends TestBase {
         boolean result = pa.evaluate(test.request, test.response, foo);
         assertThat("Result should be true.", result, is(true));
         
-        verify(APILocator.getVisitorAPI().setPersona(test.persona, test.request));
+        verify(APILocator.getVisitorAPI().setPersona( test.request, test.persona));
     }
 
     @Test
@@ -56,7 +58,7 @@ public class PersonaActionletTest extends TestBase {
         PersonaActionlet.Instance foo = pa.instanceFrom(test.params);
         boolean result = pa.evaluate(test.request, test.response, foo);
         assertThat("Result should be false because no persona was set.", result, is(false));
-        assertThat("Persona should have been set.", test.visitor.getPersona(), nullValue());
+        assertThat("Persona should have been set.", new PersonifiedVisitor(test.visitor).persona(), nullValue());
     }
 
     @Test
@@ -68,7 +70,7 @@ public class PersonaActionletTest extends TestBase {
         PersonaActionlet.Instance foo = pa.instanceFrom(test.params);
         boolean result = pa.evaluate(test.request, test.response, foo);
         assertThat("Result should be false because no persona was set.", result, is(false));
-        assertThat("Persona should have been set.", test.visitor.getPersona(), nullValue());
+        assertThat("Persona should have been set.", new PersonifiedVisitor(test.visitor).persona(), nullValue());
     }
 
     public static class TestCase {

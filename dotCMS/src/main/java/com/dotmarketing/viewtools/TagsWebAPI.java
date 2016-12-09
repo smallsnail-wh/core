@@ -56,7 +56,7 @@ public class TagsWebAPI implements ViewTool {
 	 */
 	public void accrueTags(String tags) {
 		//Accrue the given tags
-		TagUtil.accrueTags(request, tags);
+		APILocator.getVisitorAPI().accrueTags(request, tags);
 	}
 
 }

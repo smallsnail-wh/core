@@ -6,6 +6,8 @@ import com.dotcms.repackage.com.google.common.collect.Maps;
 import com.dotcms.unittest.TestUtil;
 import com.dotcms.visitor.business.VisitorAPI;
 import com.dotcms.visitor.domain.Visitor;
+import com.dotcms.visitor.domain.PersonifiedVisitor;
+import com.dotcms.visitor.domain.Visitor;
 import com.dotmarketing.business.UserAPI;
 import com.dotmarketing.exception.DotDataException;
 import com.dotmarketing.exception.DotSecurityException;
@@ -183,8 +185,8 @@ public class PersonaConditionletTest extends TestBase {
         }
 
         public TestCase withCurrentPersona(Persona persona){
-            Visitor visitor = mock(Visitor.class);
-            when(visitor.getPersona()).thenReturn(persona);
+          PersonifiedVisitor visitor = mock(PersonifiedVisitor.class);
+            when(visitor.persona()).thenReturn(persona);
             when(visitorAPI.getVisitor(request)).thenReturn(Optional.of(visitor));
             return this;
         }

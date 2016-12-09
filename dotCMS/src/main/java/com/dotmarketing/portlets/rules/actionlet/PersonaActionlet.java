@@ -1,11 +1,16 @@
 package com.dotmarketing.portlets.rules.actionlet;
 
+import java.util.Map;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.dotcms.repackage.com.google.common.annotations.VisibleForTesting;
 import com.dotcms.repackage.com.google.common.base.Preconditions;
 import com.dotcms.repackage.org.apache.commons.lang.StringUtils;
 import com.dotcms.visitor.business.VisitorAPI;
 import com.dotcms.visitor.domain.Visitor;
-import com.dotcms.visitor.domain.VisitorWrapper;
 import com.dotmarketing.business.APILocator;
 import com.dotmarketing.business.UserAPI;
 import com.dotmarketing.portlets.personas.business.PersonaAPI;
@@ -17,10 +22,6 @@ import com.dotmarketing.portlets.rules.parameter.ParameterDefinition;
 import com.dotmarketing.portlets.rules.parameter.display.RestDropdownInput;
 import com.dotmarketing.util.Logger;
 import com.liferay.portal.model.User;
-import java.util.Map;
-import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Actionlet to add Key/Value to the Request.
@@ -73,8 +74,8 @@ public class PersonaActionlet extends RuleActionlet<PersonaActionlet.Instance> {
                     Logger.warn(PersonaActionlet.class, "Persona with id '" + instance.personaId + "' not be found. Could not execute action.");
                     result = false;
                 } else {
-                  
-                  opt.get().setPersona(p);
+                  APILocator.getVisitorAPI().setPersona( opt.get(), p);
+
                   result = true;
                 }
             } else{

@@ -24,7 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.dotcms.visitor.business.VisitorAPI;
+import com.dotcms.visitor.domain.DMIDVisitor;
 import com.dotcms.visitor.domain.ImmutableVisitor;
+import com.dotcms.visitor.domain.PersonifiedVisitor;
 import com.dotcms.visitor.domain.Visitor;
 import com.dotmarketing.portlets.contentlet.business.DotContentletStateException;
 import com.dotmarketing.portlets.rules.business.RulesEngine;
@@ -436,11 +438,11 @@ public abstract class VelocityServlet extends HttpServlet {
 			boolean newVisitor = false;
 			boolean newVisit = false;
 
-			if(optVisitor.isPresent() ){
-    		    String _dotCMSID = optVisitor.get().dmid();
+			
+			if(Config.getBooleanProperty("CREATE_LONG_LIVED_TRACKING_COOKIE", true) ){
+    		    String _dotCMSID = visitorAPI.lookupDMID(request);
       			Cookie idCookie = CookieUtil.createDMIDCookie(_dotCMSID);
       			response.addCookie(idCookie);
-  				newVisitor = optVisitor.get().newVisitor();
 			}
             String _oncePerVisitCookie = UtilMethods.getCookieValue(request.getCookies(),
                     WebKeys.ONCE_PER_VISIT_COOKIE);
@@ -560,8 +562,8 @@ public abstract class VelocityServlet extends HttpServlet {
     		String queryString = request.getQueryString();
     		String persona = null;
     		Optional<Visitor> v = APILocator.getVisitorAPI().getVisitor(request, false);
-    		if(v.isPresent() && v.get().getPersona() !=null){
-    			persona=v.get().getPersona().getKeyTag();
+    		if(v.isPresent() && new PersonifiedVisitor(v.get()).persona() !=null){
+    			persona=new PersonifiedVisitor(v.get()).persona().getKeyTag();
     		}
 
     				
