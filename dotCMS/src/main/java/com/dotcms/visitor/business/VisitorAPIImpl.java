@@ -157,12 +157,14 @@ public class VisitorAPIImpl implements VisitorAPI {
 
     String dmid = new DMIDVisitor(visitor).dmid();
     
+    User user = new UserVisitor(visitor).user();
+    String userid = (user!=null) ? user.getUserId() : "anon";
     
     VisitorRequest vr = ImmutableVisitorRequest.builder().protocol(request.getProtocol())
         .serverName(request.getServerName())
         .serverPort(request.getServerPort())
         .queryString(request.getQueryString())
-        .userId(new UserVisitor(visitor).user().getUserId())
+        .userId(userid)
         .contentId(contentId)
         .visitor(visitor)
         .uri(uri)

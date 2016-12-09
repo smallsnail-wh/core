@@ -132,12 +132,14 @@ public class AbstractVisitorTest {
     assertNotNull(geo.location());
     assertNotNull(geo.continent());
     
+    /**
     System.out.println(geo.city());
     System.out.println(geo.country().getIsoCode());
     System.out.println(geo.postal());
     System.out.println(geo.subdivision());
     System.out.println(geo.location());
     System.out.println(geo.continent().getCode());
+    **/
   }
   
   

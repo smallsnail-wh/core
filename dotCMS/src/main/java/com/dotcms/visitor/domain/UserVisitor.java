@@ -18,10 +18,11 @@ public class UserVisitor extends AbstractVisitor {
 
   public UserVisitor(Visitor visitor, User user) {
     super(visitor);
+    
     map.putIfAbsent(USER, user);
   }
 
-  @Nullable
+
   public User user() {
     return (User) map.get(USER);
   }

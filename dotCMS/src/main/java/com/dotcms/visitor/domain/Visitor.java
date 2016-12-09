@@ -24,12 +24,16 @@ public interface Visitor extends Serializable {
 
   public String ipAddress();
 
-  @Value.Derived
+  @Value.Lazy
   default InetAddress inetAddress(){
     try {
       return Inet4Address.getByName(ipAddress());
     } catch (UnknownHostException e) {
-      throw new DotStateException(e);
+      try{
+        return Inet4Address.getByName("127.0.0.1");
+      } catch (UnknownHostException ex) {
+        throw new DotStateException(e);
+      }
     }
   }
   

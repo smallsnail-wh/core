@@ -2,18 +2,10 @@ package com.dotcms.visitor.domain;
 
 
 
-import java.io.IOException;
-
 import org.pmw.tinylog.Logger;
 
 import com.dotcms.repackage.com.maxmind.geoip2.DatabaseReader;
-import com.dotcms.repackage.com.maxmind.geoip2.exception.GeoIp2Exception;
-import com.dotcms.repackage.com.maxmind.geoip2.model.AnonymousIpResponse;
 import com.dotcms.repackage.com.maxmind.geoip2.model.CityResponse;
-import com.dotcms.repackage.com.maxmind.geoip2.model.ConnectionTypeResponse;
-import com.dotcms.repackage.com.maxmind.geoip2.model.CountryResponse;
-import com.dotcms.repackage.com.maxmind.geoip2.model.DomainResponse;
-import com.dotcms.repackage.com.maxmind.geoip2.model.IspResponse;
 import com.dotcms.repackage.com.maxmind.geoip2.record.City;
 import com.dotcms.repackage.com.maxmind.geoip2.record.Continent;
 import com.dotcms.repackage.com.maxmind.geoip2.record.Country;
