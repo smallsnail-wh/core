@@ -19,15 +19,18 @@ public abstract class AbstractVisitor implements Visitor {
   private static final long serialVersionUID = 1L;
 
 
-  protected final Map<String, Object> map;
+  private final Map<String, Object> map;
 
   protected final Visitor parent;
  
 
-  protected AbstractVisitor(Visitor visitor) {
+  protected AbstractVisitor(final Visitor visitor) {
+    this(visitor,(visitor instanceof AbstractVisitor) ? ((AbstractVisitor)visitor).map : new HashMap<>());
+  }
+  
+  protected AbstractVisitor(final Visitor visitor, Map<String, Object> underlyingMap) {
     this.parent =  visitor;
-    this.map = (visitor instanceof AbstractVisitor) ? ((AbstractVisitor)visitor).map : new HashMap<>();
-    
+    this.map = underlyingMap;
   }
 
   @Override
@@ -56,4 +59,11 @@ public abstract class AbstractVisitor implements Visitor {
   public String id() {
     return (parent.id() != null) ? parent.id() : UUIDUtil.uuidTimeBased();
   }
+  
+  
+  Map<String, Object> map(){
+    return this.map;
+  }
+  
+  
 }

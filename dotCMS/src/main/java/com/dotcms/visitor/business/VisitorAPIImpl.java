@@ -21,6 +21,7 @@ import com.dotcms.visitor.domain.ImmutableVisitorRequest;
 import com.dotcms.visitor.domain.PersonifiedVisitor;
 import com.dotcms.visitor.domain.TaggedVisitor;
 import com.dotcms.visitor.domain.UserVisitor;
+import com.dotcms.visitor.domain.VelocityVisitor;
 import com.dotcms.visitor.domain.Visitor;
 import com.dotcms.visitor.domain.VisitorRequest;
 import com.dotmarketing.beans.Host;
@@ -56,7 +57,7 @@ public class VisitorAPIImpl implements VisitorAPI {
 
   @Override
   public Optional<Visitor> getVisitor(HttpServletRequest request) {
-    return getVisitor(request, Config.getBooleanProperty("CREATE_VISITOR_OBJECT_IN_SESSION", false));
+    return getVisitor(request, Config.getBooleanProperty("CREATE_VISITOR_OBJECT_IN_SESSION", true));
   }
 
   @Override
@@ -77,7 +78,7 @@ public class VisitorAPIImpl implements VisitorAPI {
 
     visitor = updateVisitor(request, visitor);
 
-
+    visitor = new VelocityVisitor(visitor);
     request.setAttribute(WebKeys.VISITOR, visitor);
     if (!Objects.isNull(session)) {
       session.setAttribute(WebKeys.VISITOR, visitor);

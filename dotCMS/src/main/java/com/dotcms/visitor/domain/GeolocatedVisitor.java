@@ -18,9 +18,7 @@ import com.dotcms.util.GeoIp2CityDbUtil;
 
 
 public class GeolocatedVisitor extends AbstractVisitor {
-  /**
-   * 
-   */
+
   private static final long serialVersionUID = 1L;
 
   private  DatabaseReader db =null;
@@ -76,10 +74,10 @@ public class GeolocatedVisitor extends AbstractVisitor {
   private CityResponse cityResponse(){
 
     try {
-      CityResponse cr =(CityResponse) map.get(GeoData.CITY.toString());
+      CityResponse cr =(CityResponse) map().get(GeoData.CITY.toString());
       if(cr==null){
         cr = db().city(this.inetAddress());
-        map.put(GeoData.CITY.toString(), cr);
+        map().put(GeoData.CITY.toString(), cr);
       }
       return cr;
     } catch (Exception e) {

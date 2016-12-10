@@ -52,6 +52,7 @@ public class AnalyticLoggingFilter implements Filter {
     
     chain.doFilter(sreq, res);
     if(sreq instanceof     HttpServletRequest){
+      if(true) return;
       HttpServletRequest request =(HttpServletRequest)sreq;
       Visitor visitor = APILocator.getVisitorAPI().getVisitor(request).get();
       VisitorRequest vr = APILocator.getVisitorAPI().visitorRequest(request);

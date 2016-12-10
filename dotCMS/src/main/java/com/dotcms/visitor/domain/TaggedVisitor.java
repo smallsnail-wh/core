@@ -14,15 +14,15 @@ public class TaggedVisitor extends AbstractVisitor {
 
 
   private static final long serialVersionUID = 1L;
-  
+
   private static final String ACCRUED_TAGS = "accruedTags";
-  
+
 
 
   public TaggedVisitor(Visitor visitor) {
     super(visitor);
-    List<String> accruedTags =  map.containsKey(ACCRUED_TAGS)? (List) map.get(ACCRUED_TAGS) : new ArrayList<>();
-    map.put(ACCRUED_TAGS, accruedTags);
+    List<String> accruedTags = map().containsKey(ACCRUED_TAGS) ? (List) map().get(ACCRUED_TAGS) : new ArrayList<>();
+    map().put(ACCRUED_TAGS, accruedTags);
   }
 
 
@@ -32,7 +32,7 @@ public class TaggedVisitor extends AbstractVisitor {
   }
 
   public TaggedVisitor(Visitor visitor, String tags) {
-    this(visitor, Arrays.asList(((tags==null) ? "" : tags).split(",")));
+    this(visitor, Arrays.asList(((tags == null) ? "" : tags).split(",")));
   }
 
 
@@ -48,27 +48,29 @@ public class TaggedVisitor extends AbstractVisitor {
   }
 
 
+  @SuppressWarnings("unchecked")
   public List<String> accrued() {
-    return (List<String>) map.get(ACCRUED_TAGS);
+    return (List<String>) map().get(ACCRUED_TAGS);
   }
-  
-  
-  
+
+
+
   public List<AccruedTag> getTags() {
     return getAccruedTags();
   }
 
   public TaggedVisitor addAccruedTags(Collection<String> addingTags) {
-    
-    for(String x :addingTags ){
-      if(x!=null) accrued().add(x.trim());
+
+    for (String x : addingTags) {
+      if (x != null)
+        accrued().add(x.trim());
     }
 
     return this;
   }
 
   public TaggedVisitor addTag(String tag) {
-    if (tag != null && tag.trim().length()>0)
+    if (tag != null && tag.trim().length() > 0)
       accrued().add(tag.trim());
     return this;
   }
@@ -102,8 +104,17 @@ public class TaggedVisitor extends AbstractVisitor {
     return getAccruedTags();
   }
 
-  private List<String> accruedTagsRaw() {
-    return accrued();
+
+
+  public void remove(String tag) {
+    Iterator<String> it = accrued().iterator();
+    while (it.hasNext()) {
+      String thisTag = it.next();
+      if (thisTag.equals(tag)) {
+        it.remove();
+      }
+    }
+
   }
 
 }

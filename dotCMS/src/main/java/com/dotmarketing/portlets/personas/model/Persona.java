@@ -5,8 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.dotmarketing.business.APILocator;
+import com.dotmarketing.business.DotStateException;
+import com.dotmarketing.exception.DotDataException;
 import com.dotmarketing.portlets.contentlet.model.Contentlet;
 import com.dotmarketing.portlets.personas.business.PersonaAPI;
+import com.dotmarketing.util.TagUtil;
 
 public class Persona extends Contentlet implements IPersona{
 	private static final long serialVersionUID = -4775734788059690797L;
@@ -49,14 +53,6 @@ public class Persona extends Contentlet implements IPersona{
 		setStringProperty(PersonaAPI.DESCRIPTION_FIELD, description);
 	}
 
-	@Override
-	public String getTags() {
-		return getStringProperty(PersonaAPI.TAGS_FIELD);
-	}
 
-	@Override
-	public void setTags(List<String> tags) {
-		setStringProperty(PersonaAPI.TAGS_FIELD,tags.toString());
-	}
 
 }

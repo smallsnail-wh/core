@@ -35,6 +35,4 @@ public interface IPersona extends Serializable, Versionable, Permissionable{
 	String getDescription();
 	void setDescription(String description);
 
-	String getTags();
-	void setTags(List<String> tags);
 }

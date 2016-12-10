@@ -1,22 +1,22 @@
 package com.dotcms.visitor;
 
-import static com.dotcms.visitor.AbstractVisitorTestSetup.*;
+import static com.dotcms.visitor.AbstractVisitorTestSetup.AGENT;
 import static com.dotcms.visitor.AbstractVisitorTestSetup.IP;
 import static com.dotcms.visitor.AbstractVisitorTestSetup.KEYTAG;
 import static com.dotcms.visitor.AbstractVisitorTestSetup.REFERER;
 import static com.dotcms.visitor.AbstractVisitorTestSetup.language;
+import static com.dotcms.visitor.AbstractVisitorTestSetup.tagList;
+import static com.dotcms.visitor.AbstractVisitorTestSetup.tagListString;
 import static com.dotcms.visitor.AbstractVisitorTestSetup.visitor;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
-import com.dotcms.repackage.com.maxmind.geoip2.model.CityResponse;
 import com.dotcms.util.ConfigTestHelper;
 import com.dotcms.util.GeoIp2CityDbUtil;
+import com.dotcms.visitor.domain.CopyVisitor;
 import com.dotcms.visitor.domain.DMIDVisitor;
 import com.dotcms.visitor.domain.GeolocatedVisitor;
 import com.dotcms.visitor.domain.ImmutableVisitor;
@@ -39,7 +39,9 @@ public class AbstractVisitorTest {
     assertTrue(AGENT.equals(oldVisitor.userAgent()));
     assertTrue(REFERER.equals(oldVisitor.referer()));
     
-    DMIDVisitor newVisitor = new DMIDVisitor(oldVisitor);
+    
+    PersonifiedVisitor visitor2 = new PersonifiedVisitor(oldVisitor);
+    DMIDVisitor newVisitor = new DMIDVisitor(visitor2);
     
     
     assertTrue(old.equals(newVisitor.dmid()));
@@ -132,18 +134,27 @@ public class AbstractVisitorTest {
     assertNotNull(geo.location());
     assertNotNull(geo.continent());
     
-    /**
-    System.out.println(geo.city());
-    System.out.println(geo.country().getIsoCode());
-    System.out.println(geo.postal());
-    System.out.println(geo.subdivision());
-    System.out.println(geo.location());
-    System.out.println(geo.continent().getCode());
-    **/
   }
   
   
-  
+  @Test
+  public void copyVisitorTest() throws Exception {
+    String ip1 = "173.76.180.135";
+    String ip2 = "127.0.0.1";
+    DMIDVisitor visitor1 = new DMIDVisitor(ImmutableVisitor.copyOf(visitor).withIpAddress(ip1));
+    assertTrue(visitor1.ipAddress().equals(ip1));
+    String dmid1 = visitor1.dmid();
+    
+    
+    CopyVisitor visitor2 = new CopyVisitor(visitor1, ImmutableVisitor.copyOf(visitor1).withIpAddress(ip2));
+    assertTrue(visitor2.ipAddress().equals(ip2));
+    String dmid2 = new DMIDVisitor(visitor2).dmid();
+
+    assertTrue(dmid1.equals(dmid2));
+    
+    
+    
+  }
   
   
 }
