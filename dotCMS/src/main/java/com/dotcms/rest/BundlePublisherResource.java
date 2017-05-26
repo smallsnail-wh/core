@@ -26,8 +26,11 @@ import com.dotmarketing.util.FileUtil;
 import com.dotmarketing.util.Logger;
 import com.dotmarketing.util.UtilMethods;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -110,7 +113,10 @@ public class BundlePublisherResource {
 			}
 
 			//Write file on FS
-			FileUtil.writeToFile(bundle, bundlePath+fileName);
+            
+            Files.copy(bundle, Paths.get(bundlePath+fileName));
+            
+
 
 			//Start thread
 			if(!status.getStatus().equals(Status.PUBLISHING_BUNDLE)) {
