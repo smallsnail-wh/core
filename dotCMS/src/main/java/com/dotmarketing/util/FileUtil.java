@@ -19,6 +19,12 @@ import java.util.Set;
 
 import com.dotmarketing.beans.Inode;
 
+/**
+ * 
+ * @deprecated
+ * Use {@link com.liferay.util.FileUtil}
+ */
+@Deprecated
 public class FileUtil {
 
 	private static Set<String> extensions = new HashSet<String>();
@@ -106,35 +112,7 @@ public class FileUtil {
 		
 		return fileName;
 	}
-	
-	/**
-	 * This will write the given InputStream to a new File in the given location
-	 * 
-	 * @param uploadedInputStream
-	 * @param uploadedFileLocation
-	 * @return
-	 */
-	public static void writeToFile(InputStream uploadedInputStream,
-			String uploadedFileLocation) {
 
-		try {
-			OutputStream out = new FileOutputStream(new File(
-					uploadedFileLocation));
-			int read = 0;
-			byte[] bytes = new byte[1024];
-
-			out = new FileOutputStream(new File(uploadedFileLocation));
-			while ((read = uploadedInputStream.read(bytes)) != -1) {
-				out.write(bytes, 0, read);
-			}
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
-
-	}
 	
 
 	/**
@@ -152,27 +130,7 @@ public class FileUtil {
 		}
 	}
 
-	/**
-	 * Delete directories recursively including the initial directory, taking into account symbolic links
-	 * @param path path to be file/directory to be deleted
-	 * @throws IOException
-	 */
-	public static void deleteDir(String path) throws IOException{
-		// initial directory
-		Path directory = Paths.get(path);
-		Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
-		   @Override
-		   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-		       Files.delete(file);
-		       return FileVisitResult.CONTINUE;
-		   }
-		   @Override
-		   public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-		       Files.delete(dir);
-		       return FileVisitResult.CONTINUE;
-		   }
-		});
-	}
+
 
     public static FileFilter getOnlyFolderFileFilter() {
         return new FileFilter() {
