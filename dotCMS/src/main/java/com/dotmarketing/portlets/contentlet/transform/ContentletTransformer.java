@@ -53,7 +53,7 @@ public class ContentletTransformer implements DBTransformer {
         contentlet.setLanguageId((Long) map.get("language_id"));
 
         String key;
-        List<String> ignoredFields = new ArrayList<>();
+        final List<String> ignoredFields = new ArrayList<>();
         ignoredFields.add("inode");
         ignoredFields.add("mod_date");
         ignoredFields.add("mod_user");
@@ -64,7 +64,7 @@ public class ContentletTransformer implements DBTransformer {
         ignoredFields.add("review_interval");
         ignoredFields.add("disabled_wysiwyg");
 
-        for (Entry<String, Object> property: map.entrySet()){
+        for (final Entry<String, Object> property: map.entrySet()){
 
             key = property.getKey();
             if (!ignoredFields.contains(key)) {

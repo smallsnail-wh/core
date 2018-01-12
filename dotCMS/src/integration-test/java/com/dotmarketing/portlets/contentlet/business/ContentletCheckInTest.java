@@ -82,6 +82,7 @@ public class ContentletCheckInTest {
           asset.setContentTypeId(fileTypeId);
           asset.setHost(host.getIdentifier());
           asset.setFolder(folder1.getIdentifier());
+          
           final Contentlet con = contentletAPI.checkin(asset, user, true);
 
           final Contentlet con2 = contentletAPI.find(con.getInode(), user, true);
